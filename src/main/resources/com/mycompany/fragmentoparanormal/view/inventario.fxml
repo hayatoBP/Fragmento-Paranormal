@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+
+<HBox alignment="CENTER" spacing="40"
+      xmlns="http://javafx.com/javafx/21"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.mycompany.fragmentoparanormal.controller.InventarioController">
+
+    <VBox spacing="15" alignment="CENTER">
+
+        <Label text="Inventário"
+               style="-fx-font-size: 26px; -fx-font-weight: bold;" />
+
+        <ListView fx:id="listaItens"
+                  prefWidth="250"
+                  prefHeight="250"/>
+
+        <Button text="Usar Item" prefWidth="150" onAction="#usarItem"/>
+
+    </VBox>
+
+    <VBox spacing="15" alignment="CENTER">
+
+        <Label text="Armas"
+               style="-fx-font-size: 22px; -fx-font-weight: bold;" />
+
+        <ListView fx:id="listaArmas"
+                  prefWidth="250"
+                  prefHeight="250"/>
+
+        <Button text="Equipar Arma" prefWidth="150" onAction="#equiparArma"/>
+
+    </VBox>
+
+    <VBox spacing="15" alignment="CENTER">
+
+        <Label text="Rituais"
+               style="-fx-font-size: 22px; -fx-font-weight: bold;" />
+
+        <ListView fx:id="listaRituais"
+                  prefWidth="250"
+                  prefHeight="250"/>
+
+        <Button text="Equipar Ritual" prefWidth="150" onAction="#equiparRitual"/>
+
+    </VBox>
+
+    <VBox spacing="15" alignment="CENTER">
+
+        <Label text="Equipados"
+               style="-fx-font-size: 22px; -fx-font-weight: bold;" />
+
+        <Label fx:id="lblArmaEquipada" text="Arma: nenhuma"/>
+        <Label fx:id="lblRitualEquipado" text="Ritual: nenhum"/>
+
+        <Button text="Voltar" prefWidth="150" onAction="#voltar"/>
+
+    </VBox>
+
+</HBox>

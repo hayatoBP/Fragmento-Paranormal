@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox alignment="CENTER" spacing="14"
+      xmlns="http://javafx.com/javafx/21"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.mycompany.fragmentoparanormal.controller.MenuMissoesController"
+      style="-fx-padding: 30;">
+
+    <Label text="Menu de Missões"
+           style="-fx-font-size: 28px; -fx-font-weight: bold;"/>
+
+    <Label fx:id="lblProgresso" text="Páginas do diário: 0/7"
+           style="-fx-font-size: 15px; -fx-font-style: italic;"/>
+
+    <ListView fx:id="listaMissoes"
+              prefHeight="200" prefWidth="500"/>
+
+    <!-- Botão Boss Final — aparece só quando desbloqueado -->
+    <Button fx:id="btnBoss"
+            text="⚠  ENFRENTAR O BOSS FINAL"
+            prefWidth="280"
+            onAction="#irParaBoss"
+            style="-fx-background-color: #8b0000; -fx-text-fill: white;
+                   -fx-font-size: 16px; -fx-font-weight: bold;
+                   -fx-border-color: #ff0000; -fx-border-width: 2;"/>
+
+    <HBox alignment="CENTER" spacing="20">
+        <Button fx:id="btnComecar" text="Jogar Missão" prefWidth="160"
+                onAction="#comecarMissao"
+                style="-fx-font-size: 14px;"/>
+        <Button text="Voltar" prefWidth="120"
+                onAction="#voltar"/>
+    </HBox>
+
+</VBox>

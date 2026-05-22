@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox alignment="CENTER" spacing="20" prefWidth="800" prefHeight="600"
+      xmlns="http://javafx.com/javafx/21"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.mycompany.fragmentoparanormal.controller.TelaInicialController">
+
+    <Label text="Fragmento Paranormal"
+           style="-fx-font-size: 32px; -fx-font-weight: bold;" />
+
+    <Button text="Jogar" prefWidth="200" onAction="#abrirJogar"/>
+    <Button text="Ranking" prefWidth="200" onAction="#abrirRanking"/>
+    <Button text="Créditos" prefWidth="200" onAction="#abrirCreditos"/>
+    <Button text="Encerrar" prefWidth="200" onAction="#encerrar"/>
+
+</VBox>

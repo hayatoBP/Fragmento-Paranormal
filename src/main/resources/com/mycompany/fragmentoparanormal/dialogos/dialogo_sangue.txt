@@ -1,0 +1,3 @@
+Ordem Paranormal;Agente, detectamos uma anomalia de sangue na área.
+Ordem Paranormal;Colete os fragmentos e elimine as ameaças.
+Agente;Entendido. Missão aceita.

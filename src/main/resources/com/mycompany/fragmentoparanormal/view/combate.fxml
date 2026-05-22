@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.mycompany.fragmentoparanormal.controller.CombateController">
+
+    <top>
+        <VBox alignment="CENTER" spacing="4" style="-fx-padding: 12;">
+            <Label fx:id="lblNomeInimigo" text="Inimigo"
+                   style="-fx-font-size: 20px; -fx-font-weight: bold;"/>
+            <HBox alignment="CENTER" spacing="30">
+                <Label fx:id="lblVidaJogador" text="Vida: 100/100"
+                       style="-fx-font-size: 14px; -fx-text-fill: #c0392b;"/>
+                <Label fx:id="lblPEJogador"   text="PE: 30/30"
+                       style="-fx-font-size: 14px; -fx-text-fill: #2980b9;"/>
+                <Label fx:id="lblVidaInimigo" text="Vida Inimigo: 50"
+                       style="-fx-font-size: 14px; -fx-text-fill: #8e44ad;"/>
+                <Label fx:id="lblElementoInimigo" text="Elemento: ?"
+                       style="-fx-font-size: 14px;"/>
+            </HBox>
+        </VBox>
+    </top>
+
+    <center>
+        <VBox alignment="CENTER" spacing="12">
+
+            <HBox alignment="CENTER" spacing="60">
+                <ImageView fx:id="imgJogador"
+                           fitWidth="160" fitHeight="200"
+                           preserveRatio="true"/>
+                <Label text="VS"
+                       style="-fx-font-size: 28px; -fx-font-weight: bold;"/>
+                <ImageView fx:id="imgInimigo"
+                           fitWidth="160" fitHeight="200"
+                           preserveRatio="true"/>
+            </HBox>
+
+            <Label fx:id="lblEfetividade" text=""
+                   style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #e67e22;"/>
+
+            <Label fx:id="lblEventos" text="O combate começa!"
+                   wrapText="true"
+                   style="-fx-font-size: 14px; -fx-padding: 0 30;"
+                   maxWidth="700"/>
+        </VBox>
+    </center>
+
+    <bottom>
+        <HBox alignment="CENTER" spacing="12" style="-fx-padding: 16;">
+            <Button fx:id="btnAtacar"      text="Atacar"      prefWidth="110" onAction="#atacar"/>
+            <Button fx:id="btnRitual"      text="Ritual"      prefWidth="110" onAction="#usarRitual"/>
+            <Button text="Inventário"      prefWidth="110" onAction="#abrirInventario"/>
+            <Button fx:id="btnFugir"       text="Fugir"       prefWidth="110" onAction="#fugir"
+                    style="-fx-text-fill: #c0392b;"/>
+            <Button fx:id="btnVoltarMissao" text="Continuar"  prefWidth="130" onAction="#voltarMissao"
+                    style="-fx-background-color: #27ae60; -fx-text-fill: white; -fx-font-weight: bold;"/>
+        </HBox>
+    </bottom>
+
+</BorderPane>

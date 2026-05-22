@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox alignment="CENTER" spacing="20" prefWidth="800" prefHeight="600"
+      xmlns="http://javafx.com/javafx/21"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.mycompany.fragmentoparanormal.controller.JogadorExistenteController">
+
+    <Label text="Selecionar Jogador" style="-fx-font-size: 28px; -fx-font-weight: bold;" />
+    <ChoiceBox fx:id="choiceJogadores" prefWidth="250"/>
+    <Label fx:id="lblAviso" style="-fx-text-fill: orange;"/>
+    <HBox spacing="10" alignment="CENTER">
+        <Button text="Confirmar" onAction="#confirmar"/>
+        <Button text="Voltar" onAction="#voltar"/>
+    </HBox>
+
+</VBox>
