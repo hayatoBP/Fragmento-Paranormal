@@ -10,18 +10,29 @@ public class InvestigacaoService {
     private static final Random random = new Random();
 
     // Pool de armas que podem ser encontradas na investigação
-    private static final Arma[] ARMAS_LOOT = {
-        new Arma("Faca Ritualística",   10),
-        new Arma("Pistola Antiga",      12),
-        new Arma("Revólver .38",        14),
-        new Arma("Machete Enferrujado", 16),
-        new Arma("Espingarda Quebrada", 18),
-        new Arma("Adaga Paranormal",    20),
-        new Arma("Tocha Abençoada",      8),
+    public static final Arma[] ARMAS_LOOT = {
+        new Arma("Faca Ritualística",    10),
+        new Arma("Pistola Antiga",       12),
+        new Arma("Revólver .38",         14),
+        new Arma("Machete Enferrujado",  16),
+        new Arma("Espingarda Quebrada",  18),
+        new Arma("Adaga Paranormal",     20),
+        new Arma("Tocha Abençoada",       8),
+        new Arma("Foice Enferrujada",    15),
+        new Arma("Faca de Caça",         11),
+        new Arma("Rifle Quebrado",       22),
     };
 
+    /**
+     * Realiza a investigação e retorna o resultado como String:
+     *  - "FRAGMENTO"          → página encontrada
+     *  - "ARMA:<nome>"        → arma encontrada; MissaoController abre o diálogo de comparação
+     *  - "ITEM_PARANORMAL"    → amuleto adicionado ao inventário
+     *  - "NADA"               → nada encontrado
+     *
+     * Nenhuma arma é equipada automaticamente aqui — a decisão fica com o jogador.
+     */
     public static String investigar(Personagem jogador) {
-
         int chance = jogador.getInvestigacao();
         int numero = random.nextInt(100);
 
@@ -30,20 +41,9 @@ public class InvestigacaoService {
         }
 
         if (numero < chance + 20) {
-            // Sorteia uma arma aleatória do pool
+            // Sorteia arma — NÃO equipa, apenas informa ao controller
             Arma armaEncontrada = ARMAS_LOOT[random.nextInt(ARMAS_LOOT.length)];
-            // Só equipa se for melhor que a atual (ou se não tem nenhuma)
-            if (jogador.getArmaEquipada() == null
-                    || armaEncontrada.getBonusDano() > jogador.getArmaEquipada().getBonusDano()) {
-                jogador.setArmaEquipada(armaEncontrada);
-                return "ARMA_MELHOR:" + armaEncontrada.getNome();
-            } else {
-                // Encontrou uma arma, mas não é melhor — vai pro inventário como item
-                jogador.getInventario().adicionarItem(
-                    new Item(armaEncontrada.getNome(),
-                             "Arma encontrada na investigação. Dano: +" + armaEncontrada.getBonusDano()));
-                return "ARMA_FRACA:" + armaEncontrada.getNome();
-            }
+            return "ARMA:" + armaEncontrada.getNome() + ":" + armaEncontrada.getBonusDano();
         }
 
         if (numero < chance + 35) {

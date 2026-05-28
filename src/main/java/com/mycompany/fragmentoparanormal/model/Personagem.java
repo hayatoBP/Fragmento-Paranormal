@@ -52,18 +52,26 @@ public class Personagem {
                 forca = 25; investigacao = 10;
                 poderParanormal = 5;
                 peMaximo = 20; pontosEsforco = 20;
+                // Homem começa com Foice; Mulher começa com Faca
+                armaEquipada = (genero == Genero.HOMEM)
+                        ? new Arma("Foice",  18)
+                        : new Arma("Faca",   12);
                 break;
             case ESPECIALISTA:
                 vidaMaxima = 100; vida = 100;
                 forca = 15; investigacao = 25;
                 poderParanormal = 10;
                 peMaximo = 30; pontosEsforco = 30;
+                // Ambos os gêneros começam com Pistola
+                armaEquipada = new Arma("Pistola 9mm", 14);
                 break;
             case OCULTISTA:
                 vidaMaxima = 80; vida = 80;
                 forca = 8; investigacao = 15;
                 poderParanormal = 30;
                 peMaximo = 50; pontosEsforco = 50;
+                // Ambos os gêneros começam com Livro Paranormal (bônus mágico)
+                armaEquipada = new Arma("Livro Paranormal", 8);
                 aprenderRitual(new Ritual("Descarga Paranormal", 10, 20, 0, Elemento.ENERGIA));
                 ritualEquipado = rituais.get(0);
                 break;

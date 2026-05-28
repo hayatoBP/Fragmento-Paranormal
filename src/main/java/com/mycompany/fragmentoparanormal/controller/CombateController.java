@@ -1,8 +1,8 @@
 package com.mycompany.fragmentoparanormal.controller;
 
+import com.mycompany.fragmentoparanormal.dao.JogadorDAO;
 import com.mycompany.fragmentoparanormal.model.Inimigo;
 import com.mycompany.fragmentoparanormal.model.Personagem;
-import com.mycompany.fragmentoparanormal.service.CombateService;
 import com.mycompany.fragmentoparanormal.service.ElementoService;
 import com.mycompany.fragmentoparanormal.service.RitualService;
 import com.mycompany.fragmentoparanormal.util.GameState;
@@ -17,22 +17,22 @@ import javafx.scene.image.ImageView;
 public class CombateController {
 
     private Personagem jogador;
-    private Inimigo inimigo;
-    private boolean combateEncerrado = false;
+    private Inimigo    inimigo;
+    private boolean    combateEncerrado = false;
 
-    @FXML private Label lblNomeInimigo;
-    @FXML private Label lblVidaJogador;
-    @FXML private Label lblPEJogador;
-    @FXML private Label lblVidaInimigo;
-    @FXML private Label lblElementoInimigo;
-    @FXML private Label lblEfetividade;    // mostra "SUPER EFETIVO!", "Não muito efetivo..." etc.
-    @FXML private Label lblEventos;
+    @FXML private Label     lblNomeInimigo;
+    @FXML private Label     lblVidaJogador;
+    @FXML private Label     lblPEJogador;
+    @FXML private Label     lblVidaInimigo;
+    @FXML private Label     lblElementoInimigo;
+    @FXML private Label     lblEfetividade;
+    @FXML private Label     lblEventos;
     @FXML private ImageView imgJogador;
     @FXML private ImageView imgInimigo;
-    @FXML private Button btnAtacar;
-    @FXML private Button btnRitual;
-    @FXML private Button btnFugir;
-    @FXML private Button btnVoltarMissao;
+    @FXML private Button    btnAtacar;
+    @FXML private Button    btnRitual;
+    @FXML private Button    btnFugir;
+    @FXML private Button    btnVoltarMissao;
 
     @FXML
     public void initialize() {
@@ -68,9 +68,8 @@ public class CombateController {
     private void atacar(ActionEvent event) {
         if (combateEncerrado || jogador == null || inimigo == null) return;
 
-        // Dano físico + multiplicador elemental do jogador vs inimigo
-        int danoBase = jogador.calcularDanoFisico();
-        double mult = ElementoService.calcularMultiplicador(jogador.getElemento(), inimigo.getElemento());
+        int danoBase  = jogador.calcularDanoFisico();
+        double mult   = ElementoService.calcularMultiplicador(jogador.getElemento(), inimigo.getElemento());
         int danoFinal = (int)(danoBase * mult);
         inimigo.setVida(inimigo.getVida() - danoFinal);
 
@@ -79,12 +78,12 @@ public class CombateController {
 
         if (!inimigo.estaVivo()) {
             jogador.ganharXp(inimigo.getXpConcedido());
+            salvarJogador();
             String extra = inimigo.isBoss() ? "\n\n🎉 Parabéns! Você completou Fragmento Paranormal!" : "";
             encerrarCombate("Você derrotou o inimigo! +" + inimigo.getXpConcedido() + " XP." + extra);
             return;
         }
 
-        // Contra-ataque do inimigo — MEDO aplica 2x
         int danoInimigo = aplicarDanoInimigo();
         lblEventos.setText("Você atacou por " + danoFinal + " de dano" + efetividade
                 + ". O inimigo contra-atacou por " + danoInimigo + ".");
@@ -104,7 +103,6 @@ public class CombateController {
             return;
         }
 
-        // Multiplicador elemental do ritual vs inimigo
         double mult = jogador.getRitualEquipado() != null
                 ? ElementoService.calcularMultiplicador(jogador.getRitualEquipado().getElemento(), inimigo.getElemento())
                 : 1.0;
@@ -113,6 +111,7 @@ public class CombateController {
 
         if (!inimigo.estaVivo()) {
             jogador.ganharXp(inimigo.getXpConcedido());
+            salvarJogador();
             String extra = inimigo.isBoss() ? "\n\n🎉 Parabéns! Você completou Fragmento Paranormal!" : "";
             encerrarCombate("Ritual devastador! Inimigo derrotado! +" + inimigo.getXpConcedido() + " XP." + extra);
             return;
@@ -125,33 +124,35 @@ public class CombateController {
         atualizarTela();
     }
 
+    /** Abre inventário durante o combate — ao voltar, retorna para cá. */
     @FXML
     private void abrirInventario(ActionEvent event) {
+        GameState.setOrigemInventario("COMBATE");
         TelaUtil.trocarTela(event, "/com/mycompany/fragmentoparanormal/view/inventario.fxml");
     }
 
-    /** Fugir do combate → sinaliza fuga → tela de status com mensagem especial */
+    /** Fugir do combate → sinaliza fuga → tela de status. */
     @FXML
     private void fugir(ActionEvent event) {
         GameState.setVeioDeFuga(true);
         TelaUtil.trocarTela(event, "/com/mycompany/fragmentoparanormal/view/status.fxml");
     }
 
+    /** Botão "Voltar à Missão" — aparece apenas após o combate terminar. */
     @FXML
     private void voltarMissao(ActionEvent event) {
-        // Ao voltar da batalha, reseta vida/PE
-        if (jogador != null) jogador.resetarParaMissao();
+        // PE/vida NÃO são resetados aqui — só resetam ao Fugir (sair da missão)
         if (inimigo != null && inimigo.isBoss()) {
-            // Boss derrotado → vai ao menu
             TelaUtil.trocarTela(event, "/com/mycompany/fragmentoparanormal/view/menuMissoes.fxml");
         } else {
+            // Origem volta a ser MISSAO para que inventário funcione corretamente de lá
+            GameState.setOrigemInventario("MISSAO");
             TelaUtil.trocarTela(event, "/com/mycompany/fragmentoparanormal/view/missao.fxml");
         }
     }
 
     // ---- helpers ----
 
-    /** Aplica o dano do inimigo ao jogador e retorna o valor aplicado. */
     private int aplicarDanoInimigo() {
         double multInimigo = ElementoService.calcularMultiplicador(inimigo.getElemento(), jogador.getElemento());
         int dano = (int)(inimigo.getDano() * multInimigo);
@@ -177,9 +178,15 @@ public class CombateController {
         btnAtacar.setDisable(true);
         btnRitual.setDisable(true);
         btnFugir.setDisable(true);
-        // Derrota → tela de status sem mensagem de fuga
         GameState.setVeioDeFuga(false);
+        GameState.setMissaoEmAndamento(false);
         TelaUtil.trocarTelaPorNode(lblEventos, "/com/mycompany/fragmentoparanormal/view/status.fxml");
+    }
+
+    private void salvarJogador() {
+        if (jogador == null) return;
+        try { JogadorDAO.salvar(jogador); }
+        catch (Exception e) { System.err.println("[CombateController] Erro ao salvar: " + e.getMessage()); }
     }
 
     private String descreveEfetividade(double mult) {
