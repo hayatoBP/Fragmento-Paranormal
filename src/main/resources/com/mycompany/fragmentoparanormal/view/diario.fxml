@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<HBox alignment="TOP_CENTER" spacing="20" prefWidth="860" prefHeight="560"
+      xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.mycompany.fragmentoparanormal.controller.DiarioController"
+      style="-fx-padding: 28; -fx-background-color: #1a1a2e;">
+
+    <VBox spacing="10" prefWidth="280" alignment="TOP_CENTER">
+        <Label text="📖  Diário de Campo"
+               style="-fx-font-size: 19px; -fx-font-weight: bold; -fx-text-fill: #e0d0ff;"/>
+        <Label fx:id="lblTotal" text="0 páginas encontradas"
+               style="-fx-font-size: 12px; -fx-text-fill: #7f8c8d;"/>
+        <ListView fx:id="listaPaginas" prefHeight="400"
+                  style="-fx-background-color: #16213e; -fx-border-color: #6c3483;
+                         -fx-border-width: 1; -fx-border-radius: 4;"/>
+        <Region VBox.vgrow="ALWAYS"/>
+        <Button text="← Voltar" prefWidth="220" onAction="#voltar"
+                style="-fx-background-color: #555; -fx-text-fill: white; -fx-font-size: 13px;"/>
+    </VBox>
+
+    <VBox spacing="12" prefWidth="500" alignment="TOP_LEFT"
+          style="-fx-background-color: #16213e; -fx-border-color: #6c3483;
+                 -fx-border-width: 1; -fx-border-radius: 6; -fx-background-radius: 6;
+                 -fx-padding: 20;">
+        <Label fx:id="lblTituloPagina" text="Selecione uma página"
+               style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #e0d0ff;"/>
+        <Separator style="-fx-background-color: #6c3483;"/>
+        <Label fx:id="lblTextoPagina"
+               text="As páginas do diário que você encontrar aparecerão aqui para releitura."
+               wrapText="true" prefWidth="460" prefHeight="370"
+               style="-fx-font-size: 13px; -fx-text-fill: #ccc; -fx-padding: 10;"/>
+    </VBox>
+</HBox>

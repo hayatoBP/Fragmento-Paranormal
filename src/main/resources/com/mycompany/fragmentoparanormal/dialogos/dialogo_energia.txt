@@ -1,0 +1,3 @@
+Ordem Paranormal;Energia paranormal instável detectada na região.
+Ordem Paranormal;Investigue e colete os fragmentos.
+Agente;Vou ao local agora.

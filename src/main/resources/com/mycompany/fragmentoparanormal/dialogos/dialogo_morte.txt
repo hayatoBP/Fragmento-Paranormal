@@ -1,0 +1,3 @@
+Ordem Paranormal;Agente, há uma anomalia de morte no local.
+Ordem Paranormal;Colete os fragmentos e sobreviva.
+Agente;Estou pronto.

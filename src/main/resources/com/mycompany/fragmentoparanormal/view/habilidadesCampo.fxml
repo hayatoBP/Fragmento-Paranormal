@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<HBox alignment="TOP_CENTER" spacing="20" prefWidth="860" prefHeight="540"
+      xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.mycompany.fragmentoparanormal.controller.HabilidadesCampoController"
+      style="-fx-padding: 28; -fx-background-color: #1a1a2e;">
+
+    <!-- Lista de habilidades -->
+    <VBox spacing="10" prefWidth="280" alignment="TOP_CENTER">
+        <Label text="✦  Habilidades de Campo"
+               style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #f39c12;"/>
+        <Label text="Use antes de investigar ou combater."
+               style="-fx-font-size: 12px; -fx-text-fill: #7f8c8d;" wrapText="true"/>
+        <ListView fx:id="listaHabilidades" prefHeight="380"
+                  style="-fx-background-color: #16213e; -fx-border-color: #f39c12;
+                         -fx-border-width: 1; -fx-border-radius: 4;"/>
+        <Region VBox.vgrow="ALWAYS"/>
+        <Button text="← Voltar" prefWidth="220" onAction="#voltar"
+                style="-fx-background-color: #555; -fx-text-fill: white; -fx-font-size: 13px;"/>
+    </VBox>
+
+    <!-- Painel de detalhes -->
+    <VBox spacing="12" prefWidth="520" alignment="TOP_LEFT"
+          style="-fx-background-color: #16213e; -fx-border-color: #f39c12;
+                 -fx-border-width: 1; -fx-border-radius: 6; -fx-background-radius: 6;
+                 -fx-padding: 20;">
+
+        <Label fx:id="lblNome" text="Selecione uma habilidade"
+               style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #e0d0ff;"/>
+        <Separator style="-fx-background-color: #f39c12;"/>
+
+        <Label fx:id="lblDescricao" text="" wrapText="true" prefWidth="480"
+               style="-fx-font-size: 13px; -fx-text-fill: #bdc3c7;"/>
+        <Label fx:id="lblEfeito" text="" wrapText="true" prefWidth="480"
+               style="-fx-font-size: 13px; -fx-text-fill: #f39c12; -fx-font-weight: bold;"/>
+        <Label fx:id="lblPE" text=""
+               style="-fx-font-size: 13px; -fx-text-fill: #3498db;"/>
+
+        <Region VBox.vgrow="ALWAYS"/>
+
+        <Label fx:id="lblStatus" text=""
+               style="-fx-font-size: 13px;" wrapText="true" prefWidth="480"/>
+
+        <Button fx:id="btnUsar" text="✦  Usar Habilidade" prefWidth="220"
+                disable="true" onAction="#usarHabilidade"
+                style="-fx-background-color: #f39c12; -fx-text-fill: white;
+                       -fx-font-size: 14px; -fx-font-weight: bold;"/>
+    </VBox>
+</HBox>

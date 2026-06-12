@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.image.*?>
+
+<HBox alignment="TOP_LEFT" spacing="0" prefWidth="1100" prefHeight="660"
+      xmlns="http://javafx.com/javafx/21"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.mycompany.fragmentoparanormal.controller.InventarioController"
+      style="-fx-background-color: #1a1a2e;">
+
+    <!-- ═══════════════════════════════════════════════════
+         COLUNA ESQUERDA — categorias de itens
+         ═══════════════════════════════════════════════════ -->
+    <VBox spacing="6" prefWidth="660" style="-fx-padding: 14;">
+
+        <!-- ARMAS -->
+        <VBox spacing="4"
+              style="-fx-background-color: #16213e; -fx-border-color: #c0392b;
+                     -fx-border-width: 1; -fx-border-radius: 4; -fx-background-radius: 4;
+                     -fx-padding: 10;">
+            <Label text="⚔  Armas"
+                   style="-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: #e74c3c;"/>
+            <ListView fx:id="listaArmas" prefHeight="95"
+                      style="-fx-background-color: transparent; -fx-border-color: transparent;"/>
+            <Button text="Equipar Arma Selecionada" prefWidth="200" onAction="#equiparArma"
+                    style="-fx-background-color: #c0392b; -fx-text-fill: white; -fx-font-size: 12px; -fx-font-weight: bold;"/>
+        </VBox>
+
+        <!-- HABILIDADES ESPECIAIS -->
+        <VBox spacing="4"
+              style="-fx-background-color: #16213e; -fx-border-color: #f39c12;
+                     -fx-border-width: 1; -fx-border-radius: 4; -fx-background-radius: 4;
+                     -fx-padding: 10;">
+            <Label text="✦  Habilidades Especiais"
+                   style="-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: #f39c12;"/>
+            <ListView fx:id="listaHabilidades" prefHeight="80"
+                      style="-fx-background-color: transparent; -fx-border-color: transparent;"/>
+        </VBox>
+
+        <!-- RITUAIS -->
+        <VBox spacing="4"
+              style="-fx-background-color: #16213e; -fx-border-color: #1abc9c;
+                     -fx-border-width: 1; -fx-border-radius: 4; -fx-background-radius: 4;
+                     -fx-padding: 10;">
+            <Label text="☽  Rituais"
+                   style="-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: #1abc9c;"/>
+            <ListView fx:id="listaRituais" prefHeight="85"
+                      style="-fx-background-color: transparent; -fx-border-color: transparent;"/>
+            <HBox spacing="8">
+                <Button text="Equipar Ritual" prefWidth="160" onAction="#equiparRitual"
+                        style="-fx-background-color: #1abc9c; -fx-text-fill: white; -fx-font-size: 12px; -fx-font-weight: bold;"/>
+                <Button text="📖 Ver Rituais" prefWidth="140" onAction="#abrirTelaRituais"
+                        style="-fx-background-color: #117a65; -fx-text-fill: white; -fx-font-size: 11px;"/>
+            </HBox>
+        </VBox>
+
+        <!-- ARTEFATOS -->
+        <VBox spacing="4"
+              style="-fx-background-color: #16213e; -fx-border-color: #e67e22;
+                     -fx-border-width: 1; -fx-border-radius: 4; -fx-background-radius: 4;
+                     -fx-padding: 10;">
+            <HBox alignment="CENTER_LEFT" spacing="10">
+                <Label text="🔮  Artefatos"
+                   style="-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: #e67e22;"/>
+                <Button text="Ver Artefatos ▶" onAction="#abrirArtefatos"
+                        style="-fx-background-color: #6c3483; -fx-text-fill: #d7bde2;
+                               -fx-font-size: 11px; -fx-padding: 2 8;"/>
+            </HBox>
+            <ListView fx:id="listaArtefatos" prefHeight="75"
+                      style="-fx-background-color: transparent; -fx-border-color: transparent;"/>
+            <Button text="Equipar Artefato" prefWidth="200" onAction="#equiparArtefato"
+                    style="-fx-background-color: #e67e22; -fx-text-fill: white; -fx-font-size: 12px; -fx-font-weight: bold;"/>
+        </VBox>
+
+        <!-- ITENS CONSUMÍVEIS -->
+        <VBox spacing="4"
+              style="-fx-background-color: #16213e; -fx-border-color: #6c3483;
+                     -fx-border-width: 1; -fx-border-radius: 4; -fx-background-radius: 4;
+                     -fx-padding: 10;">
+            <Label text="🧪  Consumíveis"
+                   style="-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: #a569bd;"/>
+            <ListView fx:id="listaItens" prefHeight="70"
+                      style="-fx-background-color: transparent; -fx-border-color: transparent;"/>
+            <HBox spacing="8" alignment="CENTER_LEFT">
+                <Button fx:id="btnUsarItem" text="Usar Item" prefWidth="140"
+                        disable="true" onAction="#usarItem"
+                        style="-fx-background-color: #6c3483; -fx-text-fill: white; -fx-font-size: 12px; -fx-font-weight: bold;"/>
+                <Label fx:id="lblFeedbackItem" text="" wrapText="true" prefWidth="260"
+                       style="-fx-text-fill: #aaa; -fx-font-size: 11px;"/>
+            </HBox>
+        </VBox>
+
+    </VBox>
+
+    <!-- Divisor -->
+    <Region prefWidth="3" style="-fx-background-color: #0d0d1a;"/>
+
+    <!-- ═══════════════════════════════════════════════════
+         COLUNA DIREITA — ficha do personagem
+         ═══════════════════════════════════════════════════ -->
+    <VBox spacing="8" prefWidth="290" alignment="TOP_CENTER"
+          style="-fx-background-color: #16213e; -fx-padding: 18;">
+
+        <!-- Imagem -->
+        <ImageView fx:id="imgPersonagem" fitWidth="130" fitHeight="170" preserveRatio="true"/>
+
+        <!-- Nome -->
+        <Label fx:id="lblNome" text="Nome"
+               style="-fx-font-size: 15px; -fx-font-weight: bold; -fx-text-fill: #e0d0ff;"/>
+
+        <!-- Classe · Elemento -->
+        <Label fx:id="lblClasse" text="Classe  ·  Elemento"
+               style="-fx-font-size: 12px; -fx-text-fill: #9b59b6;"/>
+
+        <Separator style="-fx-background-color: #333;"/>
+
+        <!-- Vida / PE lado a lado -->
+        <HBox spacing="20">
+            <VBox spacing="2">
+                <Label text="❤  Vida" style="-fx-text-fill: #e74c3c; -fx-font-size: 11px;"/>
+                <Label fx:id="lblVida" text="—"
+                       style="-fx-text-fill: #ecf0f1; -fx-font-size: 13px; -fx-font-weight: bold;"/>
+            </VBox>
+            <VBox spacing="2">
+                <Label text="⚡  PE" style="-fx-text-fill: #3498db; -fx-font-size: 11px;"/>
+                <Label fx:id="lblPE" text="—"
+                       style="-fx-text-fill: #ecf0f1; -fx-font-size: 13px; -fx-font-weight: bold;"/>
+            </VBox>
+        </HBox>
+
+        <Separator style="-fx-background-color: #333;"/>
+
+        <!-- Equipados -->
+        <Label text="Equipados" style="-fx-font-size: 12px; -fx-font-weight: bold; -fx-text-fill: #bdc3c7;"/>
+
+        <Label fx:id="lblArmaEquipada" text="⚔  Arma: nenhuma"
+               wrapText="true" prefWidth="265"
+               style="-fx-text-fill: #e74c3c; -fx-font-size: 11px;"/>
+
+        <Label fx:id="lblHabilidadeEquipada" text="✦  Habilidade: —"
+               wrapText="true" prefWidth="265"
+               style="-fx-text-fill: #f39c12; -fx-font-size: 11px;"/>
+
+        <Label fx:id="lblRitualEquipado" text="☽  Ritual: nenhum"
+               wrapText="true" prefWidth="265"
+               style="-fx-text-fill: #1abc9c; -fx-font-size: 11px;"/>
+
+        <Label fx:id="lblArtefatosEquipados" text="🔮  Artefatos: nenhum"
+               wrapText="true" prefWidth="265"
+               style="-fx-text-fill: #e67e22; -fx-font-size: 11px;"/>
+
+        <Region VBox.vgrow="ALWAYS"/>
+
+        <Label fx:id="lblNivel" text="Nível 1"
+               style="-fx-font-size: 11px; -fx-text-fill: #7f8c8d;"/>
+
+        <Button text="← Voltar" prefWidth="240" onAction="#voltar"
+                style="-fx-background-color: #555; -fx-text-fill: white; -fx-font-size: 13px;"/>
+    </VBox>
+
+</HBox>

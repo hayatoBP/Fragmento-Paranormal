@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox alignment="CENTER" spacing="20"
+      xmlns="http://javafx.com/javafx/21"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.mycompany.fragmentoparanormal.controller.ChamadoController">
+
+    <Label fx:id="lblMensagem"
+           text="Agente, a Ordem te chamou para uma missão."
+           wrapText="true"
+           style="-fx-font-size: 22px; -fx-font-weight: bold;" />
+
+    <HBox spacing="15" alignment="CENTER">
+        <Button text="Aceitar" prefWidth="120" onAction="#aceitar"/>
+        <Button text="Recusar" prefWidth="120" onAction="#recusar"/>
+    </HBox>
+
+</VBox>

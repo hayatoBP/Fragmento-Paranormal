@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.image.*?>
+
+<VBox alignment="TOP_CENTER" spacing="14" prefWidth="720" prefHeight="600"
+      xmlns="http://javafx.com/javafx/21"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.mycompany.fragmentoparanormal.controller.RituaisController"
+      style="-fx-padding: 28; -fx-background-color: #1a1a2e;">
+
+    <Label text="☽  Rituais Conhecidos"
+           style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: #1abc9c;"/>
+
+    <Label text="Selecione um ritual para ver os detalhes."
+           style="-fx-font-size: 12px; -fx-text-fill: #7f8c8d;"/>
+
+    <!-- Lista de rituais -->
+    <ListView fx:id="listaRituais" prefHeight="160"
+              style="-fx-background-color: #16213e; -fx-border-color: #1abc9c; -fx-border-width: 1;"/>
+
+    <!-- Painel de detalhes do ritual selecionado -->
+    <HBox spacing="20" alignment="CENTER_LEFT" prefHeight="270"
+          style="-fx-background-color: #16213e; -fx-border-color: #333;
+                 -fx-border-width: 1; -fx-border-radius: 6; -fx-background-radius: 6;
+                 -fx-padding: 18;">
+
+        <!-- Ícone do elemento -->
+        <VBox alignment="CENTER" spacing="6" prefWidth="120">
+            <ImageView fx:id="imgElemento" fitWidth="96" fitHeight="96" preserveRatio="true"/>
+            <Label fx:id="lblNomeElemento" text=""
+                   style="-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: #1abc9c; -fx-alignment: CENTER;"/>
+        </VBox>
+
+        <!-- Dados do ritual -->
+        <VBox spacing="8" prefWidth="440">
+            <Label fx:id="lblNomeRitual" text="—"
+                   style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #e0d0ff;"/>
+
+            <GridPane hgap="14" vgap="6">
+
+                <Label text="Elemento:"        style="-fx-text-fill: #95a5a6; -fx-font-size: 12px;" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                <Label fx:id="lblElemento"     style="-fx-text-fill: #ecf0f1; -fx-font-size: 12px;" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+
+                <Label text="Custo PE:"        style="-fx-text-fill: #95a5a6; -fx-font-size: 12px;" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+                <Label fx:id="lblCustoPE"      style="-fx-text-fill: #3498db;  -fx-font-size: 12px; -fx-font-weight: bold;" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+
+                <Label text="Dano base:"       style="-fx-text-fill: #95a5a6; -fx-font-size: 12px;" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+                <Label fx:id="lblDanoBase"     style="-fx-text-fill: #e74c3c;  -fx-font-size: 12px; -fx-font-weight: bold;" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+
+                <Label text="Dano c/ seus atributos:" style="-fx-text-fill: #95a5a6; -fx-font-size: 12px;" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
+                <Label fx:id="lblDanoTotal"    style="-fx-text-fill: #e74c3c;  -fx-font-size: 12px; -fx-font-weight: bold;" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+
+                <Label text="Eficácia geral:"  style="-fx-text-fill: #95a5a6; -fx-font-size: 12px;" GridPane.columnIndex="0" GridPane.rowIndex="4"/>
+                <Label fx:id="lblEficacia"     style="-fx-font-size: 12px; -fx-font-weight: bold;" GridPane.columnIndex="1" GridPane.rowIndex="4"/>
+
+                <Label text="✅ Forte contra:" style="-fx-text-fill: #2ecc71; -fx-font-size: 12px;" GridPane.columnIndex="0" GridPane.rowIndex="5"/>
+                <Label fx:id="lblForteContra"  style="-fx-text-fill: #2ecc71; -fx-font-size: 12px; -fx-font-weight: bold;" GridPane.columnIndex="1" GridPane.rowIndex="5"/>
+
+                <Label text="   Dano forte:"  style="-fx-text-fill: #95a5a6; -fx-font-size: 12px;" GridPane.columnIndex="0" GridPane.rowIndex="6"/>
+                <Label fx:id="lblDanoForte"    style="-fx-text-fill: #2ecc71; -fx-font-size: 12px;" GridPane.columnIndex="1" GridPane.rowIndex="6"/>
+
+                <Label text="⚠  Fraco contra:" style="-fx-text-fill: #e74c3c; -fx-font-size: 12px;" GridPane.columnIndex="0" GridPane.rowIndex="7"/>
+                <Label fx:id="lblFracoContra"  style="-fx-text-fill: #e74c3c; -fx-font-size: 12px; -fx-font-weight: bold;" GridPane.columnIndex="1" GridPane.rowIndex="7"/>
+
+                <Label text="   Dano fraco:"  style="-fx-text-fill: #95a5a6; -fx-font-size: 12px;" GridPane.columnIndex="0" GridPane.rowIndex="8"/>
+                <Label fx:id="lblDanoFraco"    style="-fx-text-fill: #e67e22; -fx-font-size: 12px;" GridPane.columnIndex="1" GridPane.rowIndex="8"/>
+            </GridPane>
+        </VBox>
+    </HBox>
+
+    <Region VBox.vgrow="ALWAYS"/>
+
+    <Button text="← Voltar" prefWidth="180" onAction="#voltar"
+            style="-fx-background-color: #555; -fx-text-fill: white; -fx-font-size: 13px;"/>
+</VBox>

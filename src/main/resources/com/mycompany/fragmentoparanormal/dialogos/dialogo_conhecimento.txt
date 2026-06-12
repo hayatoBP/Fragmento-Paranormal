@@ -1,0 +1,3 @@
+Ordem Paranormal;Uma entidade de conhecimento proibido foi avistada.
+Ordem Paranormal;Fragmente sua presença e elimine a ameaça.
+Agente;Missão compreendida.

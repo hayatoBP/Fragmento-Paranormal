@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
+
+<VBox alignment="CENTER" spacing="0" prefWidth="800" prefHeight="600"
+      xmlns="http://javafx.com/javafx/21"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.mycompany.fragmentoparanormal.controller.CreditosController"
+      style="-fx-background-color: #0d0d1a; -fx-padding: 0;">
+
+    <!-- Faixa topo -->
+    <HBox prefHeight="6" prefWidth="800"
+          style="-fx-background-color: linear-gradient(to right, #6c3483, #1abc9c, #6c3483);"/>
+
+    <VBox alignment="CENTER" spacing="28" VBox.vgrow="ALWAYS" style="-fx-padding: 40 60 30 60;">
+
+        <!-- Título do jogo -->
+        <VBox alignment="CENTER" spacing="6">
+            <Label fx:id="lblTituloJogo" text="FRAGMENTO PARANORMAL"
+                   style="-fx-font-size: 34px; -fx-font-weight: bold;
+                          -fx-text-fill: #e0d0ff; -fx-effect: dropshadow(gaussian, #6c3483, 18, 0.6, 0, 0);"/>
+            <Label text="— Créditos —"
+                   style="-fx-font-size: 15px; -fx-text-fill: #888; -fx-font-style: italic;"/>
+        </VBox>
+
+        <!-- Mensagem de fim de jogo / recusa — visível só quando contexto for FIM ou RECUSA -->
+        <Label fx:id="lblMensagemContexto" text="" wrapText="true" maxWidth="620"
+               style="-fx-font-size: 14px; -fx-text-fill: #f39c12; -fx-font-style: italic;
+                      -fx-alignment: CENTER; -fx-text-alignment: center;"/>
+
+        <!-- Separador -->
+        <Line startX="0" endX="500" stroke="#6c3483" strokeWidth="1"/>
+
+        <!-- Bloco de informações -->
+        <GridPane hgap="40" vgap="14" alignment="CENTER">
+
+            <Label text="👥  Dupla:" style="-fx-font-size: 14px; -fx-text-fill: #9b59b6; -fx-font-weight: bold;"
+                   GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+            <Label text="Samuel Gomes  &amp;  Samuel Silva"
+                   style="-fx-font-size: 14px; -fx-text-fill: #ecf0f1;"
+                   GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+
+            <Label text="🎮  Jogo:" style="-fx-font-size: 14px; -fx-text-fill: #9b59b6; -fx-font-weight: bold;"
+                   GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+            <Label text="Fragmento Paranormal"
+                   style="-fx-font-size: 14px; -fx-text-fill: #ecf0f1;"
+                   GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+
+            <Label text="📚  Disciplina:" style="-fx-font-size: 14px; -fx-text-fill: #9b59b6; -fx-font-weight: bold;"
+                   GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+            <Label text="Programação Orientada a Objetos"
+                   style="-fx-font-size: 14px; -fx-text-fill: #ecf0f1;"
+                   GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+
+            <Label text="⚙  Tecnologias:" style="-fx-font-size: 14px; -fx-text-fill: #9b59b6; -fx-font-weight: bold;"
+                   GridPane.columnIndex="0" GridPane.rowIndex="3"/>
+            <VBox spacing="3" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                <Label text="Java 21" style="-fx-font-size: 13px; -fx-text-fill: #ecf0f1;"/>
+                <Label text="JavaFX 21" style="-fx-font-size: 13px; -fx-text-fill: #ecf0f1;"/>
+                <Label text="PostgreSQL 16  /  pgAdmin 4" style="-fx-font-size: 13px; -fx-text-fill: #ecf0f1;"/>
+                <Label text="Apache Maven" style="-fx-font-size: 13px; -fx-text-fill: #ecf0f1;"/>
+                <Label text="NetBeans IDE" style="-fx-font-size: 13px; -fx-text-fill: #ecf0f1;"/>
+            </VBox>
+
+        </GridPane>
+
+        <!-- Separador -->
+        <Line startX="0" endX="500" stroke="#6c3483" strokeWidth="1"/>
+
+        <!-- Botões contextuais -->
+        <HBox fx:id="boxBotoes" spacing="20" alignment="CENTER">
+            <Button fx:id="btnRecomecar" text="🔄  Recomeçar" prefWidth="170" prefHeight="40"
+                    onAction="#recomecar" managed="false" visible="false"
+                    style="-fx-background-color: #1abc9c; -fx-text-fill: white;
+                           -fx-font-size: 14px; -fx-font-weight: bold; -fx-background-radius: 6;"/>
+            <Button fx:id="btnVoltar" text="← Voltar ao Menu" prefWidth="170" prefHeight="40"
+                    onAction="#voltarMenu"
+                    style="-fx-background-color: #6c3483; -fx-text-fill: white;
+                           -fx-font-size: 14px; -fx-font-weight: bold; -fx-background-radius: 6;"/>
+            <Button fx:id="btnEncerrar" text="✕  Encerrar Jogo" prefWidth="170" prefHeight="40"
+                    onAction="#encerrar"
+                    style="-fx-background-color: #922b21; -fx-text-fill: white;
+                           -fx-font-size: 14px; -fx-font-weight: bold; -fx-background-radius: 6;"/>
+        </HBox>
+
+    </VBox>
+
+    <!-- Faixa rodapé -->
+    <HBox prefHeight="6" prefWidth="800"
+          style="-fx-background-color: linear-gradient(to right, #6c3483, #1abc9c, #6c3483);"/>
+
+</VBox>

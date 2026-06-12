@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox alignment="CENTER" spacing="20"
+      xmlns="http://javafx.com/javafx/21"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.mycompany.fragmentoparanormal.controller.RankingController">
+
+    <Label text="Ranking"
+           style="-fx-font-size: 28px; -fx-font-weight: bold;" />
+
+    <TableView fx:id="tabelaRanking"
+               prefWidth="600"
+               prefHeight="350">
+
+        <columns>
+            <TableColumn fx:id="colNome" text="Nome" prefWidth="200"/>
+            <TableColumn fx:id="colNivel" text="Nível" prefWidth="100"/>
+            <TableColumn fx:id="colClasse" text="Classe" prefWidth="150"/>
+            <TableColumn fx:id="colFase" text="Fase/Missão" prefWidth="150"/>
+        </columns>
+
+    </TableView>
+
+    <Button text="Voltar" prefWidth="150" onAction="#voltar"/>
+
+</VBox>

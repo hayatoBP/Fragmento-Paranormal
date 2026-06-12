@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox alignment="CENTER" spacing="20"
+      xmlns="http://javafx.com/javafx/21"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.mycompany.fragmentoparanormal.controller.JogarController">
+
+    <Label text="Jogar"
+           style="-fx-font-size: 28px; -fx-font-weight: bold;" />
+
+    <Button text="Jogar com jogador existente" prefWidth="250" onAction="#abrirJogadorExistente"/>
+    <Button text="Jogar com novo jogador" prefWidth="250" onAction="#abrirNovoJogador"/>
+    <Button text="Voltar" prefWidth="250" onAction="#voltar"/>
+
+</VBox>

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox alignment="CENTER" spacing="16"
+      xmlns="http://javafx.com/javafx/21"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.mycompany.fragmentoparanormal.controller.StatusController"
+      style="-fx-padding: 30;">
+
+    <Label fx:id="lblTitulo" text="Distribuição de Status"
+           style="-fx-font-size: 26px; -fx-font-weight: bold;"/>
+
+    <!-- Painel de fuga — visível somente quando veio de fuga -->
+    <VBox fx:id="painelFuga" alignment="CENTER" spacing="10"
+          style="-fx-background-color: #1a1108; -fx-border-color: #8b0000;
+                 -fx-border-width: 2; -fx-border-radius: 4; -fx-padding: 16;">
+        <Label fx:id="lblMensagemFuga"
+               text="Uma noite difícil...\nVocê teve que voltar para a Ordem."
+               wrapText="true" alignment="CENTER"
+               style="-fx-font-size: 16px; -fx-text-fill: #c0392b; -fx-font-style: italic;"/>
+        <Button fx:id="btnConfirmarFuga" text="Confirmar"
+                prefWidth="150" onAction="#confirmarFuga"
+                style="-fx-background-color: #8b0000; -fx-text-fill: white; -fx-font-size: 14px;"/>
+    </VBox>
+
+    <!-- Estatísticas -->
+    <Label fx:id="lblNivel" text="Nível: 1" style="-fx-font-weight: bold; -fx-text-fill: #f39c12;"/>
+        <Label fx:id="lblPontos" text="Pontos disponíveis: 0"
+           style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
+
+    <HBox spacing="15" alignment="CENTER">
+        <Label fx:id="lblForca" text="Força: 0" prefWidth="200"/>
+        <Button text="+" onAction="#adicionarForca"/>
+    </HBox>
+    <HBox spacing="15" alignment="CENTER">
+        <Label fx:id="lblInvestigacao" text="Investigação: 0" prefWidth="200"/>
+        <Button text="+" onAction="#adicionarInvestigacao"/>
+    </HBox>
+    <HBox spacing="15" alignment="CENTER">
+        <Label fx:id="lblPoderParanormal" text="Poder Paranormal: 0" prefWidth="200"/>
+        <Button text="+" onAction="#adicionarPoderParanormal"/>
+    </HBox>
+
+    <HBox spacing="30" alignment="CENTER">
+        <Label fx:id="lblVida" text="Vida máxima: 100"
+               style="-fx-text-fill: #c0392b;"/>
+        <Label fx:id="lblPE"   text="PE máximo: 30"
+               style="-fx-text-fill: #2980b9;"/>
+    </HBox>
+
+    <Button text="Confirmar e Voltar ao Menu" prefWidth="220" onAction="#confirmar"
+            style="-fx-font-size: 14px;"/>
+
+</VBox>

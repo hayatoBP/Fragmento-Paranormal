@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox alignment="TOP_CENTER" spacing="20" prefWidth="900" prefHeight="620"
+      xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.mycompany.fragmentoparanormal.controller.EscolhaHabilidadeController"
+      style="-fx-padding: 30; -fx-background-color: #1a1a2e;">
+
+    <HBox prefHeight="5" prefWidth="900"
+          style="-fx-background-color: linear-gradient(to right,#6c3483,#1abc9c,#6c3483);"/>
+
+    <Label fx:id="lblTitulo" text="Escolha uma habilidade"
+           style="-fx-font-size: 26px; -fx-font-weight: bold; -fx-text-fill: #e0d0ff;"/>
+    <Label fx:id="lblDescricao" text=""
+           style="-fx-font-size: 13px; -fx-text-fill: #7f8c8d;"/>
+
+    <Label fx:id="lblAviso" text=""
+           style="-fx-text-fill: #f39c12; -fx-font-size: 13px;"/>
+
+    <ScrollPane fitToWidth="true" prefHeight="430"
+                style="-fx-background-color: transparent; -fx-background: transparent;">
+        <FlowPane fx:id="painelOpcoes" hgap="16" vgap="16" prefWrapLength="860"
+                  style="-fx-padding: 10; -fx-background-color: transparent;"/>
+    </ScrollPane>
+
+    <HBox prefHeight="5" prefWidth="900"
+          style="-fx-background-color: linear-gradient(to right,#6c3483,#1abc9c,#6c3483);"/>
+</VBox>

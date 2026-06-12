@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox alignment="CENTER" spacing="20" prefWidth="800" prefHeight="600"
+      xmlns="http://javafx.com/javafx/21"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.mycompany.fragmentoparanormal.controller.JogadorExistenteController"
+      style="-fx-padding: 30;">
+
+    <Label text="Selecionar Agente" style="-fx-font-size: 28px; -fx-font-weight: bold;"/>
+
+    <TableView fx:id="tabelaJogadores" prefWidth="720" prefHeight="360">
+        <columns>
+            <TableColumn fx:id="colNome"     text="Nome"    prefWidth="180"/>
+            <TableColumn fx:id="colClasse"   text="Classe"  prefWidth="120"/>
+            <TableColumn fx:id="colElemento" text="Elemento" prefWidth="120"/>
+            <TableColumn fx:id="colNivel"    text="Nível"   prefWidth="70"/>
+            <TableColumn fx:id="colArma"     text="Arma Equipada" prefWidth="200"/>
+        </columns>
+        <placeholder>
+            <Label text="Nenhum agente salvo encontrado." style="-fx-font-size: 14px; -fx-text-fill: gray;"/>
+        </placeholder>
+    </TableView>
+
+    <Label fx:id="lblAviso" style="-fx-text-fill: orange; -fx-font-size: 13px;"/>
+
+    <HBox spacing="14" alignment="CENTER">
+        <Button text="Carregar Agente" prefWidth="160" onAction="#confirmar"
+                style="-fx-font-size: 14px;"/>
+        <Button text="Voltar" prefWidth="120" onAction="#voltar"
+                style="-fx-font-size: 14px;"/>
+    </HBox>
+
+</VBox>
