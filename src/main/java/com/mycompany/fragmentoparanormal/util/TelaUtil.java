@@ -6,6 +6,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import com.mycompany.fragmentoparanormal.controller.GameContext;
 
 public class TelaUtil {
 
@@ -16,6 +17,7 @@ public class TelaUtil {
             );
             Stage stage = (Stage) ((Node) event.getSource())
                 .getScene().getWindow();
+            GameContext.setMainStage(stage);
             stage.setScene(new Scene(root, 800, 600));
             stage.show();
         } catch (Exception e) {
@@ -30,6 +32,7 @@ public class TelaUtil {
                 TelaUtil.class.getResource(caminhoFXML)
             );
             Stage stage = (Stage) node.getScene().getWindow();
+            GameContext.setMainStage(stage);
             stage.setScene(new Scene(root, 800, 600));
             stage.show();
         } catch (Exception e) {

@@ -32,54 +32,54 @@ public class CatalogoRituaisService {
     static {
         // ── SANGUE ──────────────────────────────────────────────────
         CATALOGO.add(new EntradaRitual(
-            new Ritual("Golpe Hemorrágico",  3, 15, 0, Elemento.SANGUE),
+            new Ritual("Golpe Hemorrágico",  5, 25, 0, Elemento.SANGUE, "Um golpe que faz o sangue do inimigo ferver e jorrar."),
             TipoHabilidade.FRACA, Elemento.SANGUE, 1.0));
 
         CATALOGO.add(new EntradaRitual(
-            new Ritual("Explosão de Carne",  6, 30, 0, Elemento.SANGUE),
+            new Ritual("Explosão de Carne",  10, 45, 0, Elemento.SANGUE, "O corpo do inimigo se rompe em uma explosão visceral."),
             TipoHabilidade.MEDIA, Elemento.SANGUE, 1.5));
 
         CATALOGO.add(new EntradaRitual(
-            new Ritual("Banquete Carmesim", 12, 60, 0, Elemento.SANGUE),
+            new Ritual("Banquete Carmesim", 18, 85, 0, Elemento.SANGUE, "Você drena a essência vital do inimigo em um massacre."),
             TipoHabilidade.FORTE, Elemento.SANGUE, 2.0));
 
         // ── MORTE ────────────────────────────────────────────────────
         CATALOGO.add(new EntradaRitual(
-            new Ritual("Decadenza",               3, 14, 0, Elemento.MORTE),
+            new Ritual("Decadenza",               5, 22, 0, Elemento.MORTE, "Acelera o processo de apodrecimento do alvo."),
             TipoHabilidade.FRACA, Elemento.MORTE, 1.0));
 
         CATALOGO.add(new EntradaRitual(
-            new Ritual("Envelhecimento Acelerado", 7, 28, 0, Elemento.MORTE),
+            new Ritual("Envelhecimento Acelerado", 10, 42, 0, Elemento.MORTE, "O tempo passa em segundos para o corpo do inimigo."),
             TipoHabilidade.MEDIA, Elemento.MORTE, 1.5));
 
         CATALOGO.add(new EntradaRitual(
-            new Ritual("Fim Inevitável",          12, 55, 0, Elemento.MORTE),
+            new Ritual("Fim Inevitável",          18, 80, 0, Elemento.MORTE, "Você convoca o vazio para reclamar a existência do alvo."),
             TipoHabilidade.FORTE, Elemento.MORTE, 2.0));
 
         // ── ENERGIA ──────────────────────────────────────────────────
         CATALOGO.add(new EntradaRitual(
-            new Ritual("Descarga Elétrica",   4, 16, 0, Elemento.ENERGIA),
+            new Ritual("Descarga Elétrica",   6, 28, 0, Elemento.ENERGIA, "Uma arco voltaico atinge o inimigo com precisão."),
             TipoHabilidade.FRACA, Elemento.ENERGIA, 1.0));
 
         CATALOGO.add(new EntradaRitual(
-            new Ritual("Tempestade Caótica",  8, 35, 0, Elemento.ENERGIA),
+            new Ritual("Tempestade Caótica",  12, 52, 0, Elemento.ENERGIA, "Raios imprevisíveis castigam todos ao redor."),
             TipoHabilidade.MEDIA, Elemento.ENERGIA, 1.5));
 
         CATALOGO.add(new EntradaRitual(
-            new Ritual("Ruptura Energética", 13, 65, 0, Elemento.ENERGIA),
+            new Ritual("Ruptura Energética", 20, 95, 0, Elemento.ENERGIA, "Uma explosão de energia pura desintegra a matéria."),
             TipoHabilidade.FORTE, Elemento.ENERGIA, 2.0));
 
         // ── CONHECIMENTO ─────────────────────────────────────────────
         CATALOGO.add(new EntradaRitual(
-            new Ritual("Lâmina Mental",        3, 14, 0, Elemento.CONHECIMENTO),
+            new Ritual("Lâmina Mental",        5, 22, 0, Elemento.CONHECIMENTO, "Uma projeção de puro pensamento corta a mente do alvo."),
             TipoHabilidade.FRACA, Elemento.CONHECIMENTO, 1.0));
 
         CATALOGO.add(new EntradaRitual(
-            new Ritual("Colapso Cognitivo",    7, 32, 0, Elemento.CONHECIMENTO),
+            new Ritual("Colapso Cognitivo",    10, 44, 0, Elemento.CONHECIMENTO, "O excesso de informação destrói a consciência do inimigo."),
             TipoHabilidade.MEDIA, Elemento.CONHECIMENTO, 1.5));
 
         CATALOGO.add(new EntradaRitual(
-            new Ritual("Revelação Absoluta",  12, 58, 0, Elemento.CONHECIMENTO),
+            new Ritual("Revelação Absoluta",  18, 82, 0, Elemento.CONHECIMENTO, "A verdade sobre o paranormal é demais para qualquer mente."),
             TipoHabilidade.FORTE, Elemento.CONHECIMENTO, 2.0));
     }
 

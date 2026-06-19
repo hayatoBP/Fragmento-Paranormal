@@ -1,6 +1,9 @@
 package com.mycompany.fragmentoparanormal.model;
 
 import com.mycompany.fragmentoparanormal.util.Elemento;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 
 
@@ -13,6 +16,8 @@ public class Missao {
     private int fragmentosNecessarios;
     private int ordem;
     private boolean concluida;
+    private List<LocalMapa> locais;
+    private int localAtual; // Índice do local atual na lista 'locais'
 
     public Missao(String nome,
                   Elemento elemento,
@@ -28,6 +33,8 @@ public class Missao {
         this.fragmentosNecessarios = fragmentosNecessarios;
         this.ordem = ordem;
         this.concluida = false;
+        this.locais = new ArrayList<>();
+        this.localAtual = 0; // Começa no primeiro local
     }
 
     public String getNome() {
@@ -61,6 +68,47 @@ public class Missao {
     public void concluir() {
         concluida = true;
     }
+
+    public List<LocalMapa> getLocais() { return locais; }
+    public void setLocais(List<LocalMapa> locais) { this.locais = locais; }
+
+    public int getLocalAtual() { return localAtual; }
+    public void setLocalAtual(int localAtual) { this.localAtual = localAtual; }
+
+    public LocalMapa getLocalAtualObj() {
+        if (localAtual >= 0 && localAtual < locais.size()) {
+            return locais.get(localAtual);
+        }
+        return null;
+    }
+
+    public LocalMapa getProximoLocalLiberado() {
+        for (int i = 0; i < locais.size(); i++) {
+            if (locais.get(i).isLiberado() && !locais.get(i).isPaginaEncontrada()) {
+                return locais.get(i);
+            }
+        }
+        return null;
+    }
+
+    public String getPaginasLocaisEncontradasAsString() {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < locais.size(); i++) {
+            sb.append(locais.get(i).isPaginaEncontrada() ? "1" : "0");
+            if (i < locais.size() - 1) {
+                sb.append(",");
+            }
+        }
+        return sb.toString();
+    }
+
+    public void setPaginasLocaisEncontradasFromString(String paginasStr) {
+        String[] paginasArray = paginasStr.split(",");
+        for (int i = 0; i < paginasArray.length && i < locais.size(); i++) {
+            locais.get(i).setPaginaEncontrada(paginasArray[i].equals("1"));
+        }
+    }
+
 
     @Override
     public String toString() {

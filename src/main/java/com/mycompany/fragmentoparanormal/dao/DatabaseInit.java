@@ -58,6 +58,8 @@ public class DatabaseInit {
                     paginas_coletadas   INT           NOT NULL DEFAULT 0,
                     concluida           BOOLEAN       NOT NULL DEFAULT FALSE,
                     boss_desbloqueado   BOOLEAN       NOT NULL DEFAULT FALSE,
+                    local_atual         INT           NOT NULL DEFAULT 0,
+                    paginas_locais_encontradas TEXT NOT NULL DEFAULT '0,0,0,0,0,0,0',
                     iniciada_em         TIMESTAMP     NOT NULL DEFAULT CURRENT_TIMESTAMP,
                     atualizada_em       TIMESTAMP     NOT NULL DEFAULT CURRENT_TIMESTAMP,
                     UNIQUE(jogador_id, elemento_missao)
@@ -78,6 +80,16 @@ public class DatabaseInit {
                 )
             """);
  
+            // Migração: adicionar colunas para o sistema de mapa se não existirem
+            try {
+                conn.createStatement().execute(
+                    "ALTER TABLE campanhas ADD COLUMN IF NOT EXISTS local_atual INT NOT NULL DEFAULT 0");
+                conn.createStatement().execute(
+                    "ALTER TABLE campanhas ADD COLUMN IF NOT EXISTS paginas_locais_encontradas TEXT NOT NULL DEFAULT '0,0,0,0,0,0,0'");
+            } catch (Exception ex) {
+                System.err.println("[DB] Migração campanhas: " + ex.getMessage());
+            }
+
             // Migração: adicionar colunas tipo e bonus_dano se não existirem
             try {
                 conn.createStatement().execute(

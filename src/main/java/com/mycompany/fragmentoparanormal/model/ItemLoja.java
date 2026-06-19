@@ -1,6 +1,5 @@
 package com.mycompany.fragmentoparanormal.model;
 
-import com.mycompany.fragmentoparanormal.util.RaridadeItem;
 import com.mycompany.fragmentoparanormal.util.TipoItem;
 
 /**

@@ -3,36 +3,56 @@ package com.mycompany.fragmentoparanormal.model;
 import com.mycompany.fragmentoparanormal.util.Elemento;
 import com.mycompany.fragmentoparanormal.util.TipoInimigo;
 
+/**
+ * Representa um inimigo ou boss do jogo.
+ *
+ * Escalonamento por missão (índice 0–3):
+ *   Missão 1 (Sangue)       → base
+ *   Missão 2 (Morte)        → +25% vida/dano
+ *   Missão 3 (Energia)      → +55% vida/dano
+ *   Missão 4 (Conhecimento) → +90% vida/dano
+ *
+ * Bosses de missão são significativamente mais fortes que inimigos fortes normais.
+ * O Boss Final (MEDO) é muito superior a todos os demais bosses.
+ */
 public class Inimigo {
 
-    private String nome;
-    private Elemento elemento;
+    // ── Tipos de boss ─────────────────────────────────────────────────
+    public enum TipoBoss { NENHUM, MISSAO, FINAL }
+
+    private String     nome;
+    private Elemento   elemento;
     private TipoInimigo tipo;
-    private boolean isBoss;
+    private TipoBoss   tipoBoss;
+    private int        vida;
+    private int        dano;
+    private int        xpConcedido;
+    private String     imagem;
 
-    private int vida;
-    private int dano;
-    private int xpConcedido;
-    private String imagem;
-
-    /** XP por missão conforme especificação. */
-    private static final int[][] XP_POR_MISSAO = {
-        // { fraco, forte } — índice 0=Sangue, 1=Morte, 2=Energia, 3=Conhecimento
-        { 25,  50 },   // Missão 1 — Sangue
-        { 40,  75 },   // Missão 2 — Morte
-        { 60, 110 },   // Missão 3 — Energia
-        { 90, 160 },   // Missão 4 — Conhecimento
+    // ── Tabelas de XP ─────────────────────────────────────────────────
+    /** XP para inimigos normais { fraco, forte } por missão (índice 0–3). */
+    private static final int[][] XP_NORMAL = {
+        {  90,  160 },   // Missão 1 — Sangue
+        { 130,  240 },   // Missão 2 — Morte
+        { 190,  340 },   // Missão 3 — Energia
+        { 260,  480 },   // Missão 4 — Conhecimento
     };
 
-    private static final int[] XP_BOSS_POR_MISSAO = { 150, 250, 400, 600 };
+    /** XP dos bosses de missão (índice 0–3). */
+    private static final int[] XP_BOSS_MISSAO = { 600, 950, 1400, 2200 };
 
-    /** Construtor para inimigos normais — recebe índice da missão (0–3). */
+    /** XP do boss final. */
+    private static final int XP_BOSS_FINAL = 5000;
+
+    // ── Construtores ──────────────────────────────────────────────────
+
+    /** Inimigo normal (fraco ou forte) com escalonamento por missão. */
     public Inimigo(Elemento elemento, TipoInimigo tipo, int indiceMissao) {
         this.elemento = elemento;
         this.tipo     = tipo;
-        this.isBoss   = false;
-        configurarInimigo(indiceMissao);
-        definirImagem();
+        this.tipoBoss = TipoBoss.NENHUM;
+        configurarNormal(indiceMissao);
+        definirImagemNormal();
     }
 
     /** Construtor legado sem índice de missão — usa missão 1 como padrão. */
@@ -40,37 +60,88 @@ public class Inimigo {
         this(elemento, tipo, 0);
     }
 
-    private Inimigo(boolean boss, int indiceMissao) {
-        this.isBoss   = boss;
-        this.elemento = Elemento.MEDO;
+    /** Construtor privado para bosses. */
+    private Inimigo(TipoBoss tipoBoss, Elemento elemento, int indiceMissao) {
+        this.elemento = elemento;
         this.tipo     = TipoInimigo.FORTE;
-        this.nome     = "O Quarto Anfitrião";
-        this.vida     = 500;
-        this.dano     = 50;
-        this.xpConcedido = 1500;
-        this.imagem   = "/com/mycompany/fragmentoparanormal/images/monstros/conhecimento_forte.png";
-    }
-
-    public static Inimigo criarBoss() { return new Inimigo(true, 0); }
-
-    private void configurarInimigo(int idx) {
-        int i = Math.max(0, Math.min(3, idx));
-
-        if (tipo == TipoInimigo.FRACO) {
-            nome = "Criatura Fraca de " + elemento;
-            // Vida e dano escalam levemente por missão
-            vida         = 40 + i * 20;
-            dano         = 8  + i * 6;
-            xpConcedido  = XP_POR_MISSAO[i][0];
+        this.tipoBoss = tipoBoss;
+        if (tipoBoss == TipoBoss.MISSAO) {
+            configurarBossMissao(indiceMissao);
+            definirImagemBossMissao(elemento);
         } else {
-            nome = "Criatura Forte de " + elemento;
-            vida         = 100 + i * 40;
-            dano         = 20  + i * 10;
-            xpConcedido  = XP_POR_MISSAO[i][1];
+            configurarBossFinal();
+            this.imagem = "/com/mycompany/fragmentoparanormal/images/monstros/boss_medo.png";
         }
     }
 
-    private void definirImagem() {
+    // ── Fábricas ──────────────────────────────────────────────────────
+
+    /**
+     * Cria o boss de uma missão específica.
+     * @param elemento     elemento da missão (SANGUE, MORTE, ENERGIA ou CONHECIMENTO)
+     * @param indiceMissao índice 0–3
+     */
+    public static Inimigo criarBossMissao(Elemento elemento, int indiceMissao) {
+        return new Inimigo(TipoBoss.MISSAO, elemento, indiceMissao);
+    }
+
+    /** Cria o Boss Final (MEDO). */
+    public static Inimigo criarBossFinal() {
+        return new Inimigo(TipoBoss.FINAL, Elemento.MEDO, -1);
+    }
+
+    /** Compatibilidade com código legado — cria o Boss Final. */
+    public static Inimigo criarBoss() {
+        return criarBossFinal();
+    }
+
+    // ── Configuração interna ──────────────────────────────────────────
+
+    private void configurarNormal(int idx) {
+        int i = Math.max(0, Math.min(3, idx));
+        // Multiplicadores de escalonamento por missão
+        double[] multVida = { 1.0, 1.25, 1.55, 1.90 };
+        double[] multDano = { 1.0, 1.20, 1.45, 1.75 };
+
+        if (tipo == TipoInimigo.FRACO) {
+            nome        = "Criatura Fraca de " + elemento;
+            vida        = (int)(45  * multVida[i]);
+            dano        = (int)(9   * multDano[i]);
+            xpConcedido = XP_NORMAL[i][0];
+        } else {
+            nome        = "Criatura Forte de " + elemento;
+            vida        = (int)(110 * multVida[i]);
+            dano        = (int)(22  * multDano[i]);
+            xpConcedido = XP_NORMAL[i][1];
+        }
+    }
+
+    private void configurarBossMissao(int idx) {
+        int i = Math.max(0, Math.min(3, idx));
+        // Multiplicadores de escalonamento por missão (mais agressivos que inimigos normais)
+        double[] multVida = { 1.0, 1.35, 1.70, 2.10 };
+        double[] multDano = { 1.0, 1.30, 1.60, 2.00 };
+
+        String[] nomesBoss = {
+            "O Devorador de Sangue",
+            "O Senhor da Morte",
+            "O Condutor de Energia",
+            "O Guardião do Conhecimento"
+        };
+        nome        = nomesBoss[i];
+        vida        = (int)(280 * multVida[i]);
+        dano        = (int)(35  * multDano[i]);
+        xpConcedido = XP_BOSS_MISSAO[i];
+    }
+
+    private void configurarBossFinal() {
+        nome        = "O Quarto Anfitrião — Medo Absoluto";
+        vida        = 1200;
+        dano        = 80;
+        xpConcedido = XP_BOSS_FINAL;
+    }
+
+    private void definirImagemNormal() {
         imagem = switch (elemento) {
             case SANGUE       -> tipo == TipoInimigo.FRACO
                     ? "/com/mycompany/fragmentoparanormal/images/monstros/sangue_fraco.png"
@@ -88,15 +159,32 @@ public class Inimigo {
         };
     }
 
-    public boolean estaVivo() { return vida > 0; }
-    public boolean isBoss()   { return isBoss; }
+    private void definirImagemBossMissao(Elemento elem) {
+        imagem = switch (elem) {
+            case SANGUE       -> "/com/mycompany/fragmentoparanormal/images/monstros/boss_sangue.png";
+            case MORTE        -> "/com/mycompany/fragmentoparanormal/images/monstros/boss_morte.png";
+            case ENERGIA      -> "/com/mycompany/fragmentoparanormal/images/monstros/boss_energia.png";
+            case CONHECIMENTO -> "/com/mycompany/fragmentoparanormal/images/monstros/boss_conhecimento.png";
+            default           -> "/com/mycompany/fragmentoparanormal/images/monstros/boss_medo.png";
+        };
+    }
 
-    public String     getNome()           { return nome; }
-    public Elemento   getElemento()       { return elemento; }
-    public TipoInimigo getTipo()          { return tipo; }
-    public int        getVida()           { return vida; }
-    public void       setVida(int vida)   { this.vida = vida; }
-    public int        getDano()           { return dano; }
-    public int        getXpConcedido()    { return xpConcedido; }
-    public String     getImagem()         { return imagem; }
+    // ── Consultas ─────────────────────────────────────────────────────
+
+    public boolean estaVivo()      { return vida > 0; }
+    public boolean isBoss()        { return tipoBoss != TipoBoss.NENHUM; }
+    public boolean isBossMissao()  { return tipoBoss == TipoBoss.MISSAO; }
+    public boolean isBossFinal()   { return tipoBoss == TipoBoss.FINAL; }
+    public TipoBoss getTipoBoss()  { return tipoBoss; }
+
+    // ── Getters / Setters ─────────────────────────────────────────────
+
+    public String      getNome()           { return nome; }
+    public Elemento    getElemento()       { return elemento; }
+    public TipoInimigo getTipo()           { return tipo; }
+    public int         getVida()           { return vida; }
+    public void        setVida(int vida)   { this.vida = vida; }
+    public int         getDano()           { return dano; }
+    public int         getXpConcedido()    { return xpConcedido; }
+    public String      getImagem()         { return imagem; }
 }

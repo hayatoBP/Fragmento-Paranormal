@@ -54,9 +54,12 @@ public class Personagem {
     // ── Flag: pendente escolha de habilidade ao upar ─────────────────
     private boolean escolhaPendente = false;
 
-    /** Níveis em que aparece a tela de escolha (uniforme até 60, 11 intervalos). */
+    /**
+     * Níveis em que aparece a tela de escolha de habilidades/rituais.
+     * Espaçados de 5 em 5 para que o jogador demore mais para desbloquear habilidades.
+     */
     public static final Set<Integer> NIVEIS_ESCOLHA =
-        Set.of(6, 12, 18, 24, 30, 36, 42, 48, 54, 57, 60);
+        Set.of(5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60);
 
     // ── Construtor ────────────────────────────────────────────────────
     public Personagem(String nome, ClassePersonagem classe, Genero genero, Elemento elemento) {
@@ -147,23 +150,43 @@ public class Personagem {
         reducaoPreparacao = 0.0;
     }
 
+    public int getVidaAtual() {
+        return vida;
+    }
+
+    public void setVidaAtual(int vida) {
+        this.vida = vida;
+    }
+
+    public int getPeAtual() {
+        return pontosEsforco;
+    }
+
+    public void setPeAtual(int pontosEsforco) {
+        this.pontosEsforco = pontosEsforco;
+    }
+
     // ── Sistema de XP ─────────────────────────────────────────────────
     /**
-     * Curva de XP conforme especificação:
-     * Níveis 1–9 usam tabela fixa; a partir do nível 10 usa fórmula.
+     * Curva de XP revisada para balanceamento:
+     * - Níveis iniciais mais fáceis (inimigos dão mais XP agora).
+     * - Escala mais suave nos níveis médios.
+     * - Cresce mais rápido nos níveis altos para evitar que o jogador fique
+     *   excessivamente forte no final do jogo.
      */
     public int xpParaProximoNivel() {
         return switch (nivel) {
-            case 1  -> 100;
-            case 2  -> 180;
-            case 3  -> 280;
-            case 4  -> 400;
-            case 5  -> 550;
-            case 6  -> 700;
-            case 7  -> 900;
-            case 8  -> 1150;
-            case 9  -> 1450;
-            default -> 1450 + (nivel - 9) * 350; // cresce 350 XP por nível após o 9
+            case 1  -> 80;
+            case 2  -> 150;
+            case 3  -> 240;
+            case 4  -> 350;
+            case 5  -> 480;
+            case 6  -> 640;
+            case 7  -> 820;
+            case 8  -> 1020;
+            case 9  -> 1260;
+            case 10 -> 1540;
+            default -> 1540 + (nivel - 10) * 450; // Escala mais agressiva nos níveis altos
         };
     }
 
@@ -177,17 +200,18 @@ public class Personagem {
 
     private void subirNivel() {
         nivel++;
-        pontosAtributo += (nivel <= 5) ? 4 : 2;
+        // Ganha 1 ponto de atributo a cada nível (reduzido de 2 para 1 para balanceamento)
+        pontosAtributo += 1;
 
-        if (nivel <= 4) {
-            vidaMaxima += 8;  peMaximo += 4;
-        } else {
-            vidaMaxima += 4;  peMaximo += 2;
-        }
+        // Bônus fixos de vida e PE por nível conforme especificações
+        vidaMaxima += 15;
+        peMaximo += 10;
 
+        // Desbloqueios automáticos permanecem (Amaldiçoar Arma no 5, Rituais no 7/18)
         desbloquearAutomatico();
 
-        // Marca escolha pendente se for nível de escolha
+        // Marca escolha pendente apenas nos níveis definidos em NIVEIS_ESCOLHA
+        // (a cada 5 níveis) para que o jogador demore mais para desbloquear habilidades
         if (NIVEIS_ESCOLHA.contains(nivel)) {
             escolhaPendente = true;
         }
@@ -203,14 +227,14 @@ public class Personagem {
     }
 
     private void desbloquearRitualAutomatico() {
-        // Nível 7 → ritual MÉDIO do elemento próprio
-        if (nivel == 7) {
+        // Nível 10 → ritual MÉDIO do elemento próprio (atrasado para balanceamento)
+        if (nivel == 10) {
             Ritual r = CatalogoRituaisService.getRitualMedio(elemento).ritual();
             if (rituais.stream().noneMatch(x -> x.getNome().equals(r.getNome())))
                 rituais.add(r);
         }
-        // Nível 18 → ritual FORTE do elemento próprio
-        if (nivel == 18) {
+        // Nível 22 → ritual FORTE do elemento próprio (atrasado para balanceamento)
+        if (nivel == 22) {
             Ritual r = CatalogoRituaisService.getRitualForte(elemento).ritual();
             if (rituais.stream().noneMatch(x -> x.getNome().equals(r.getNome())))
                 rituais.add(r);
@@ -218,23 +242,23 @@ public class Personagem {
     }
 
     private void desbloquearHabilidadeAutomaticaCombatente() {
-        // Nível 5 → Amaldiçoar Arma
-        if (nivel == 5) {
+        // Nível 8 → Amaldiçoar Arma (atrasado para balanceamento)
+        if (nivel == 8) {
             Habilidade h = CatalogoHabilidadesService.buscarPorNome("Amaldiçoar Arma");
             if (h != null && habilidades.stream().noneMatch(x -> x.getNome().equals(h.getNome())))
                 habilidades.add(h);
         }
-        // Nível 7 → habilidade MÉDIA da árvore elemental do elemento próprio
-        if (nivel == 7) desbloquearMediaElemental();
-        // Nível 18 → habilidade FORTE da árvore elemental do elemento próprio
-        if (nivel == 18) desbloquearForteElemental();
+        // Nível 10 → habilidade MÉDIA da árvore elemental do elemento próprio
+        if (nivel == 10) desbloquearMediaElemental();
+        // Nível 22 → habilidade FORTE da árvore elemental do elemento próprio
+        if (nivel == 22) desbloquearForteElemental();
     }
 
     private void desbloquearHabilidadeAutomaticaEspecialista() {
-        // Nível 7 → habilidade MÉDIA da árvore elemental do elemento próprio
-        if (nivel == 7) desbloquearMediaElemental();
-        // Nível 18 → habilidade FORTE da árvore elemental do elemento próprio
-        if (nivel == 18) desbloquearForteElemental();
+        // Nível 10 → habilidade MÉDIA da árvore elemental do elemento próprio
+        if (nivel == 10) desbloquearMediaElemental();
+        // Nível 22 → habilidade FORTE da árvore elemental do elemento próprio
+        if (nivel == 22) desbloquearForteElemental();
     }
 
     private void desbloquearMediaElemental() {
@@ -271,16 +295,20 @@ public class Personagem {
     }
 
     // ── Afinidade elemental ───────────────────────────────────────────
-    /** Bônus de dano quando usa habilidade/ritual do elemento próprio. */
-    public double getBonusAfinidade(Elemento elementoHabilidade) {
-        return elementoHabilidade == this.elemento ? 1.20 : 1.0;
+    /** Bônus de dano quando usa habilidade/ritual do elemento próprio (+20%). */
+    public double getBonusAfinidade(Elemento ritualElem) {
+        if (ritualElem == elemento) {
+            return 1.20;
+        }
+        return 1.0;
     }
 
-    /** Redução de custo de PE quando usa habilidade/ritual do elemento próprio. */
-    public int getCustoPEComAfinidade(int custoPEBase, Elemento elementoHabilidade) {
-        if (elementoHabilidade == this.elemento)
-            return Math.max(1, (int)(custoPEBase * 0.80)); // 20% de desconto
-        return custoPEBase;
+    /** Redução de custo de PE quando usa habilidade/ritual do elemento próprio (-2 PE). */
+    public int getCustoPEComAfinidade(int custoBase, Elemento ritualElem) {
+        if (ritualElem == elemento) {
+            return Math.max(1, custoBase - 2);
+        }
+        return custoBase;
     }
 
     // ── Amaldiçoar Arma (Combatente) ─────────────────────────────────
@@ -358,9 +386,12 @@ public class Personagem {
 
     public int calcularDanoRitual() {
         int dano = poderParanormal;
-        if (classe == ClassePersonagem.OCULTISTA) dano += 15;
+        // Ocultista ganha bônus base maior em rituais (+25 fixo)
+        if (classe == ClassePersonagem.OCULTISTA) dano += 25;
         return dano;
     }
+
+
 
     /** Elemento efetivo do ataque físico (considera Amaldiçoar Arma). */
     public Elemento getElementoAtaqueAtual() {
@@ -415,8 +446,13 @@ public class Personagem {
     public ClassePersonagem getClasse()              { return classe; }
     public Genero getGenero()                        { return genero; }
     public Elemento getElemento()                    { return elemento; }
-    public int getNivel()                            { return nivel; }
-    public int getXpAtual()                          { return xpAtual; }
+    private int id; // Adicionar campo id
+    public int getId() { return id; }
+    public void setId(int id) { this.id = id; }
+    public int getNivel() { return nivel; }
+    public void setNivel(int nivel) { this.nivel = nivel; }
+    public int getXpAtual() { return xpAtual; }
+    public void setXpAtual(int xp) { this.xpAtual = xp; }
     public int getXpParaProximoNivel()               { return xpParaProximoNivel(); }
     public int getVida()                             { return vida; }
     public void setVida(int vida)                    { this.vida = Math.min(vida, vidaMaxima); }
@@ -453,7 +489,9 @@ public class Personagem {
     public boolean isEscolhaPendente()               { return escolhaPendente; }
     public void setEscolhaPendente(boolean v)        { this.escolhaPendente = v; }
 
-    public String getImagemBase() { return imagemBase; }
+    private String scene; // Adicionar campo scene
+    public String getScene() { return scene; }
+    public void setScene(String scene) { this.scene = scene; }
 
     public String getImagemAtual() {
         if (armaEquipada == null) return imagemBase;

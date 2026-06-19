@@ -6,30 +6,60 @@ import com.mycompany.fragmentoparanormal.model.Personagem;
 import com.mycompany.fragmentoparanormal.util.Elemento;
 import com.mycompany.fragmentoparanormal.util.GameState;
 import com.mycompany.fragmentoparanormal.util.TipoInimigo;
+import com.mycompany.fragmentoparanormal.model.LocalMapa;
+
 import java.util.Random;
 
+/**
+ * Responsável por gerar inimigos (normais, bosses de missão e boss final).
+ *
+ * Lógica de geração:
+ *  1. Se a campanha foi concluída e o boss final foi desbloqueado → Boss Final (MEDO).
+ *  2. Se a missão atual está concluída (todas as páginas coletadas) e o boss da missão
+ *     ainda não foi derrotado → Boss de Missão.
+ *  3. Caso contrário → inimigo normal (fraco ou forte) com escalonamento por missão.
+ */
 public class GeradorInimigoService {
 
     private static final Random random = new Random();
 
     public static Inimigo gerarInimigo(Personagem jogador) {
-        Elemento    elemento     = sortearElemento();
-        TipoInimigo tipo         = sortearTipo(jogador.getNivel());
-        int         indiceMissao = getIndiceMissaoAtual();
+        // 1. Boss Final — só aparece após concluir TODAS as missões
+        if (MissaoService.campanhaConcluida() && GameState.isBossDesbloqueado()) {
+            return Inimigo.criarBossFinal();
+        }
+
+        Missao missaoAtual = GameState.getMissaoAtual();
+        int indiceMissao   = getIndiceMissaoAtual(missaoAtual);
+
+        // 2. Boss de Missão — aparece quando todas as páginas da missão atual foram coletadas
+        //    e o boss ainda não foi derrotado nesta sessão
+        if (missaoAtual != null
+                && missaoAtual.getLocais().stream().allMatch(LocalMapa::isPaginaEncontrada)
+                && !GameState.isBossMissaoDerrotado(indiceMissao)) {
+            return Inimigo.criarBossMissao(missaoAtual.getElemento(), indiceMissao);
+        }
+
+        // 3. Inimigo normal
+        Elemento    elemento = sortearElemento(missaoAtual);
+        TipoInimigo tipo     = sortearTipo(jogador.getNivel());
         return new Inimigo(elemento, tipo, indiceMissao);
     }
 
-    private static int getIndiceMissaoAtual() {
-        Missao m = GameState.getMissaoAtual();
-        if (m == null) return 0;
-        return MissaoService.getIndiceMissao(m.getElemento());
+    private static int getIndiceMissaoAtual(Missao missao) {
+        if (missao == null) return 0;
+        return MissaoService.getIndiceMissao(missao.getElemento());
     }
 
-    private static Elemento sortearElemento() {
-        Missao missaoAtual = GameState.getMissaoAtual();
-        if (missaoAtual != null && missaoAtual.getElemento() != null) {
+    private static Elemento sortearElemento(Missao missaoAtual) {
+        // Inimigos comuns NUNCA possuem o elemento MEDO.
+        // Se a missão atual tiver um elemento específico, há 70% de chance de segui-lo.
+        if (missaoAtual != null
+                && missaoAtual.getElemento() != null
+                && missaoAtual.getElemento() != Elemento.MEDO) {
             if (random.nextInt(100) < 70) return missaoAtual.getElemento();
         }
+        // Sorteia entre os elementos válidos, EXCLUINDO Medo
         Elemento[] validos = java.util.Arrays.stream(Elemento.values())
                 .filter(e -> e != Elemento.MEDO)
                 .toArray(Elemento[]::new);
@@ -37,10 +67,11 @@ public class GeradorInimigoService {
     }
 
     /**
-     * nível 1–3  → 100% FRACO
-     * nível 4–6  → 20% FORTE
-     * nível 7–10 → 40% FORTE
-     * nível 11+  → 60% FORTE
+     * Probabilidade de inimigo FORTE por faixa de nível:
+     *   nível 1–3  → 0%
+     *   nível 4–6  → 20%
+     *   nível 7–10 → 40%
+     *   nível 11+  → 60%
      */
     private static TipoInimigo sortearTipo(int nivel) {
         int chanceForte = nivel <= 3 ? 0

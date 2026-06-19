@@ -61,7 +61,11 @@ public class InventarioController {
 
     private void carregarInventario() {
         if (jogador == null) return;
-        listaArmas.getItems().setAll(jogador.getArmas());
+        
+        // Garante que a lista de armas mostre todas as armas que o jogador possui
+        java.util.List<Arma> todasArmas = new java.util.ArrayList<>(jogador.getArmas());
+        listaArmas.getItems().setAll(todasArmas);
+        
         listaRituais.getItems().setAll(jogador.getRituais());
         carregarHabilidades();
 
@@ -262,13 +266,13 @@ public class InventarioController {
     private void equiparArma() {
         Arma arma = listaArmas.getSelectionModel().getSelectedItem();
         if (arma == null) { feedback("Selecione uma arma para equipar."); return; }
-        Arma anterior = jogador.getArmaEquipada();
-        if (anterior != null) {
-            boolean jaExiste = jogador.getArmas().stream().anyMatch(a -> a.getNome().equals(anterior.getNome()));
-            if (!jaExiste) jogador.adicionarArma(anterior);
-        }
+        
+        // Equipamos a nova arma
         jogador.setArmaEquipada(arma);
-        jogador.getArmas().remove(arma);
+        
+        // BUG CORRIGIDO: Não removemos mais a arma da lista de armas possuídas.
+        // O jogador pode ter várias armas e alternar entre elas livremente.
+        
         atualizarInfoPersonagem();
         carregarInventario();
         feedback("⚔ " + arma.getNome() + " equipada!");

@@ -9,13 +9,23 @@ public class Ritual {
     private int dano;
     private int cura;
     private Elemento elemento;
+    private String descricao;
 
     public Ritual(String nome, int custoPE, int dano, int cura, Elemento elemento) {
+        this(nome, custoPE, dano, cura, elemento, "");
+    }
+
+    public Ritual(String nome, int custoPE, int dano, int cura, Elemento elemento, String descricao) {
         this.nome = nome;
         this.custoPE = custoPE;
         this.dano = dano;
         this.cura = cura;
         this.elemento = elemento;
+        this.descricao = descricao;
+    }
+
+    public String getDescricao() {
+        return (descricao == null || descricao.isEmpty()) ? "Um ritual de " + elemento + "." : descricao;
     }
 
     public String getNome() {

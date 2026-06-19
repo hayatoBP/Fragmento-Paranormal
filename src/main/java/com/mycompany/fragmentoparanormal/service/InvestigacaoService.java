@@ -18,16 +18,16 @@ public class InvestigacaoService {
 
     // ── Armas loot ───────────────────────────────────────────────────
     public static final Arma[] ARMAS_LOOT = {
-        new Arma("Faca Ritualística",    10, "Lâmina entalhada com símbolos ocultistas."),
-        new Arma("Pistola Antiga",       12, "Revólver enferrujado, mas ainda dispara."),
-        new Arma("Revólver .38",         14, "Calibre médio. Confiável em combate próximo."),
-        new Arma("Machete Enferrujado",  16, "Lâmina longa e pesada."),
-        new Arma("Espingarda Quebrada",  18, "A coronha está rachada, mas o cano funciona."),
-        new Arma("Adaga Paranormal",     20, "Parece vibrar nas suas mãos."),
-        new Arma("Tocha Abençoada",       8, "Madeira sacralizada. Afasta espíritos menores."),
-        new Arma("Foice Enferrujada",    15, "Pesada, mas eficaz."),
-        new Arma("Faca de Caça",         11, "Ferramenta robusta de caçador experiente."),
-        new Arma("Rifle Quebrado",       22, "O mecanismo falha às vezes, mas o impacto é brutal."),
+        new Arma("Faca de Cozinha",      5,  "Uma faca comum, pouco eficaz contra o paranormal."),
+        new Arma("Faca de Caça",         10, "Lâmina robusta, boa para combate próximo."),
+        new Arma("Machadinha",           15, "Ferramenta pesada que causa cortes profundos."),
+        new Arma("Pistola de Dardos",    12, "Dispara projéteis rápidos, mas de baixo impacto."),
+        new Arma("Revólver .38",         18, "Calibre clássico. Confiável e letal."),
+        new Arma("Machete de Combate",   20, "Lâmina longa projetada para combate real."),
+        new Arma("Espingarda de Cano Duplo", 25, "Alto poder de fogo à queima-roupa."),
+        new Arma("Rifle de Precisão",    30, "Calculado para atingir pontos vitais de longe."),
+        new Arma("Katana Cerimonial",    35, "Lâmina afiada capaz de cortar o próprio ar."),
+        new Arma("Marreta de Demolição", 40, "Impacto bruto capaz de esmagar ossos e rituais."),
     };
 
     // ── Consumíveis (foco: cura e PE) ────────────────────────────────
@@ -89,7 +89,7 @@ public class InvestigacaoService {
      * @param jogador       personagem do jogador
      * @param itensSessao   quantos itens já foram encontrados nesta sessão
      */
-    public static String investigar(Personagem jogador, int itensSessao) {
+    public static String investigar(Personagem jogador) {
         double inv = jogador.getInvestigacao();
 
         // Bônus de investigação do Especialista
@@ -128,7 +128,7 @@ public class InvestigacaoService {
         if (random.nextDouble() * 100.0 < 8.0) return "PISTA_RARA";
 
         // 5) Item — 18%, mas apenas se abaixo do limite de sessão
-        if (itensSessao < MAX_ITENS_SESSAO && random.nextDouble() * 100.0 < 18.0) {
+        if (random.nextDouble() * 100.0 < 18.0) {
             if (bonusInv > 1.0) jogador.marcarBonusInvestigacaoUsado();
             return gerarItem(jogador);
         }

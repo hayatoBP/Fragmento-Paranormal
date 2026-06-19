@@ -279,10 +279,10 @@ public class JogadorDAO {
         p.setPeMaximo        (rs.getInt("pe_maximo"));
         p.setPontosAtributo  (rs.getInt("pontos_atributo"));
 
-        // Repõe nível e XP via reflexão ou setters públicos
-        for (int i = 1; i < rs.getInt("nivel"); i++) {
-            p.ganharXp(100); // sobe nível sem alterar o XP real
-        }
+        // Repõe nível e XP diretamente para evitar disparar subirNivel repetidamente
+        int nivelSalvo = rs.getInt("nivel");
+        p.setNivel(nivelSalvo);
+        p.setXpAtual(rs.getInt("xp_atual"));
         // Ajusta o XP atual exato
         // (ganharXp sobe nível quando chega a 100; aqui só repomos o estado)
 

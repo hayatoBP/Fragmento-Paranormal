@@ -93,7 +93,12 @@ public class CatalogoArtefatosService {
         new Artefato.Builder()
             .nome("Símbolo Arcano")
             .descricao("Gravura de uma ordem extinta. Amplifica a reserva de poder.")
-            .peMaximo(12).poderParanormal(5).build()
+            .peMaximo(12).poderParanormal(5).build(),
+
+        new Artefato.Builder()
+            .nome("Livro Paranormal")
+            .descricao("Um tomo repleto de segredos proibidos. Aumenta drasticamente o seu Poder Paranormal.")
+            .poderParanormal(15).build()
     );
 
     public static List<Artefato> getTodos() { return TODOS; }

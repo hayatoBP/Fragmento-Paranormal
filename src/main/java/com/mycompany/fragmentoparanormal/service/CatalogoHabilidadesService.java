@@ -38,24 +38,24 @@ public class CatalogoHabilidadesService {
 
         // ── Árvore de Ataque ────────────────────────────────────────
         TODAS.add(new Habilidade.Builder()
-            .nome("Ataque Brutal").custoPE(2)
+            .nome("Ataque Brutal").custoPE(3)
             .descricao("Um golpe direto, sem cerimônias.")
-            .efeito("Causa 120% do dano da arma.")
-            .multiplicador(1.20)
+            .efeito("Causa 140% do dano da arma.")
+            .multiplicador(1.40)
             .arvore(TipoArvore.ATAQUE).tipo(TipoHabilidade.FRACA).classe(C).build());
 
         TODAS.add(new Habilidade.Builder()
-            .nome("Investida Devastadora").custoPE(5)
+            .nome("Investida Devastadora").custoPE(8)
             .descricao("Você avança com força total contra o inimigo.")
-            .efeito("Causa 170% do dano da arma.")
-            .multiplicador(1.70)
+            .efeito("Causa 200% do dano da arma.")
+            .multiplicador(2.00)
             .arvore(TipoArvore.ATAQUE).tipo(TipoHabilidade.MEDIA).classe(C).build());
 
         TODAS.add(new Habilidade.Builder()
-            .nome("Golpe Executor").custoPE(10)
+            .nome("Golpe Executor").custoPE(15)
             .descricao("Um golpe definitivo, calculado para destruir.")
-            .efeito("Causa 250% do dano da arma.")
-            .multiplicador(2.50)
+            .efeito("Causa 300% do dano da arma.")
+            .multiplicador(3.00)
             .arvore(TipoArvore.ATAQUE).tipo(TipoHabilidade.FORTE).classe(C).build());
 
         // ── Árvore de Defesa ────────────────────────────────────────
@@ -219,24 +219,24 @@ public class CatalogoHabilidadesService {
 
         // ── Árvore de Precisão (combate) ────────────────────────────
         TODAS.add(new Habilidade.Builder()
-            .nome("Tiro Preciso").custoPE(2)
+            .nome("Tiro Preciso").custoPE(4)
             .descricao("Um disparo cuidadosamente mira no ponto certo.")
-            .efeito("Causa 130% do dano da arma.")
-            .multiplicador(1.30)
+            .efeito("Causa 150% do dano da arma.")
+            .multiplicador(1.50)
             .arvore(TipoArvore.PRECISAO).tipo(TipoHabilidade.FRACA).classe(E).build());
 
         TODAS.add(new Habilidade.Builder()
-            .nome("Ponto Vital").custoPE(5)
+            .nome("Ponto Vital").custoPE(10)
             .descricao("Você identifica e atinge um ponto vital do inimigo.")
-            .efeito("Causa 180% do dano da arma.")
-            .multiplicador(1.80)
+            .efeito("Causa 220% do dano da arma.")
+            .multiplicador(2.20)
             .arvore(TipoArvore.PRECISAO).tipo(TipoHabilidade.MEDIA).classe(E).build());
 
         TODAS.add(new Habilidade.Builder()
-            .nome("Disparo Perfeito").custoPE(10)
+            .nome("Disparo Perfeito").custoPE(18)
             .descricao("Um único tiro impossível de desviar.")
-            .efeito("Causa 260% do dano da arma.")
-            .multiplicador(2.60)
+            .efeito("Causa 320% do dano da arma.")
+            .multiplicador(3.20)
             .arvore(TipoArvore.PRECISAO).tipo(TipoHabilidade.FORTE).classe(E).build());
 
         // ── Árvore de Investigação (campo) ───────────────────────────
@@ -433,14 +433,21 @@ public class CatalogoHabilidadesService {
     /** Verifica se o pré-requisito de uma habilidade está cumprido. */
     private static boolean preRequisitoCumprido(Habilidade h, List<String> aprendidas) {
         if (h.getTipoHabilidade() == null) return true; // habilidade especial (Amaldiçoar)
+        
+        // Habilidades iniciais (FRACAS) não têm pré-requisito
+        if (h.getTipoHabilidade() == com.mycompany.fragmentoparanormal.util.TipoHabilidade.FRACA) return true;
+        
+        // Para árvores normais, o elemento é null. Para a árvore ELEMENTAL, o elemento deve coincidir.
+        Elemento elementoReq = (h.getArvore() == TipoArvore.ELEMENTAL) ? h.getElementoArvore() : null;
+        
         return switch (h.getTipoHabilidade()) {
-            case FRACA -> true;
             case MEDIA -> aprendidas.stream().anyMatch(nome ->
-                encontrarFraca(h.getClasseDona(), h.getArvore(), h.getElementoArvore())
+                encontrarFraca(h.getClasseDona(), h.getArvore(), elementoReq)
                     .stream().anyMatch(f -> f.getNome().equals(nome)));
             case FORTE -> aprendidas.stream().anyMatch(nome ->
-                encontrarMedia(h.getClasseDona(), h.getArvore(), h.getElementoArvore())
+                encontrarMedia(h.getClasseDona(), h.getArvore(), elementoReq)
                     .stream().anyMatch(m -> m.getNome().equals(nome)));
+            default -> true;
         };
     }
 

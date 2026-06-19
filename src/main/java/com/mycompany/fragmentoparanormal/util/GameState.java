@@ -12,13 +12,15 @@ public class GameState {
     private static boolean veioDeFuga        = false;
     private static boolean veioDeDerrota     = false;
     private static boolean bossDesbloqueado  = false;
+    // Controla se o boss de cada missão (0–3) já foi derrotado nesta sessão
+    private static final int   TOTAL_MISSOES     = 4;
+    private static final boolean[] bossMissaoDerrotado = new boolean[TOTAL_MISSOES];
     private static boolean investigouNesteAvanco = false;
     private static boolean missaoEmAndamento = false;
     private static String  origemInventario  = "MISSAO";
 
-    private static final int[] paginasPorMissao = new int[4];
-    private static final int   PAGINAS_POR_MISSAO = 7;
-    private static final int   TOTAL_MISSOES     = 4;
+
+
 
     /** Páginas encontradas em ordem de descoberta — disponíveis para releitura. */
     private static final List<PaginaDiario> paginasEncontradas = new ArrayList<>();
@@ -65,7 +67,8 @@ public class GameState {
 
     // ── Páginas do diário ─────────────────────────────────────────────
     public static void registrarPagina(int missaoIdx, int numeroPagina) {
-        String titulo = nomeMissao(missaoIdx) + " — Página " + numeroPagina;
+        // O número da página agora é a ordem do local + 1
+        String titulo = missaoAtual.getNome() + " — " + missaoAtual.getLocais().get(numeroPagina - 1).getNome();
         String texto  = TEXTOS[missaoIdx][numeroPagina - 1];
         boolean jaExiste = paginasEncontradas.stream().anyMatch(p -> p.titulo().equals(titulo));
         if (!jaExiste) paginasEncontradas.add(new PaginaDiario(titulo, texto));
@@ -102,24 +105,64 @@ public class GameState {
     public static String  getOrigemInventario()            { return origemInventario; }
     public static void    setOrigemInventario(String o)    { origemInventario = o; }
 
-    public static int  getPaginasMissao(int i)             { return paginasPorMissao[i]; }
-    public static void incrementarPaginaMissao(int i) {
-        if (i >= 0 && i < TOTAL_MISSOES && paginasPorMissao[i] < PAGINAS_POR_MISSAO)
-            paginasPorMissao[i]++;
+
+
+    /**
+     * Perde metade das páginas coletadas na missão atual.
+     * Se for contra um Boss, o jogador volta com exatamente 4 páginas.
+     */
+    public static void perderPaginasParcial(boolean contraBoss) {
+        if (missaoAtual == null) return;
+            int idx = missaoAtual.getOrdem() - 1;
+            if (idx >= 0 && idx < TOTAL_MISSOES) {
+                int totalAtual = (int) missaoAtual.getLocais().stream().filter(l -> l.isPaginaEncontrada()).count();
+            int novasPaginas;
+
+            if (contraBoss) {
+                // Se morreu pro boss, volta com 4 páginas
+                novasPaginas = 4;
+            } else {
+                // Se morreu/fugiu comum, perde metade (arredondado pra cima na perda)
+                // Ex: 1->0, 2->1, 3->1, 4->2, 5->2, 6->3, 7->3
+                novasPaginas = totalAtual / 2;
+            }
+
+            // Remove todas as páginas da missão atual e readiciona apenas as que sobraram
+            paginasEncontradas.removeIf(p -> p.titulo().contains(missaoAtual.getNome()));
+            for (int i = 0; i < missaoAtual.getLocais().size(); i++) {
+                missaoAtual.getLocais().get(i).setPaginaEncontrada(false);
+            }
+            for (int i = 0; i < novasPaginas; i++) {
+                missaoAtual.getLocais().get(i).setPaginaEncontrada(true);
+                registrarPagina(missaoAtual.getOrdem() - 1, i + 1); // +1 para ordem e número da página
+            }
+        }
+        
+        // Recupera vida/PE ao voltar ao QG
+        if (com.mycompany.fragmentoparanormal.controller.GameContext.jogadorAtual != null) {
+            com.mycompany.fragmentoparanormal.controller.GameContext.jogadorAtual.resetarParaMissao();
+        }
     }
-    public static int totalPaginasColetadas() {
-        int t = 0; for (int p : paginasPorMissao) t += p; return t;
-    }
-    public static String progressoMissao(int i)  { return paginasPorMissao[i] + "/" + PAGINAS_POR_MISSAO; }
-    public static int getPaginasPorMissao()       { return PAGINAS_POR_MISSAO; }
-    public static int getTotalPaginasJogo()       { return PAGINAS_POR_MISSAO * TOTAL_MISSOES; }
 
     public static void resetar() {
         missaoAtual = null; veioDeFuga = false; veioDeDerrota = false;
         bossDesbloqueado = false; investigouNesteAvanco = false;
         missaoEmAndamento = false; origemInventario = "MISSAO";
-        Arrays.fill(paginasPorMissao, 0);
+
+        Arrays.fill(bossMissaoDerrotado, false);
         paginasEncontradas.clear();
+    }
+
+    // ── Boss de missão ────────────────────────────────────────────────
+    public static boolean isBossMissaoDerrotado(int i) {
+        return i >= 0 && i < 4 && bossMissaoDerrotado[i];
+    }
+    public static void setBossMissaoDerrotado(int i, boolean v) {
+        if (i >= 0 && i < 4) bossMissaoDerrotado[i] = v;
+    }
+
+    public static int getTotalPaginasJogo() {
+        return TEXTOS[0].length * TOTAL_MISSOES;
     }
 
     public record PaginaDiario(String titulo, String texto) {}

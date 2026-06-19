@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-
 <VBox alignment="CENTER" spacing="16"
       xmlns="http://javafx.com/javafx/21"
       xmlns:fx="http://javafx.com/fxml/1"
@@ -24,22 +23,39 @@
                 style="-fx-background-color: #8b0000; -fx-text-fill: white; -fx-font-size: 14px;"/>
     </VBox>
 
-    <!-- Estatísticas -->
+    <!-- Nível e dinheiro -->
     <Label fx:id="lblNivel" text="Nível: 1" style="-fx-font-weight: bold; -fx-text-fill: #f39c12;"/>
-        <Label fx:id="lblPontos" text="Pontos disponíveis: 0"
+    <Label fx:id="lblDinheiro" text="Dinheiro: 0 moedas"
+           style="-fx-font-size: 13px; -fx-text-fill: #2ecc71;"/>
+
+    <Label fx:id="lblPontos" text="Pontos disponíveis: 0"
            style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
 
-    <HBox spacing="15" alignment="CENTER">
-        <Label fx:id="lblForca" text="Força: 0" prefWidth="200"/>
-        <Button text="+" onAction="#adicionarForca"/>
+    <!-- Força -->
+    <HBox spacing="10" alignment="CENTER">
+        <Label fx:id="lblForca" text="Força: 0" prefWidth="220"/>
+        <Button text="+" onAction="#adicionarForca"
+                style="-fx-background-color: #27ae60; -fx-text-fill: white; -fx-font-weight: bold; -fx-min-width: 32;"/>
+        <Button text="−" onAction="#removerForca"
+                style="-fx-background-color: #c0392b; -fx-text-fill: white; -fx-font-weight: bold; -fx-min-width: 32;"/>
     </HBox>
-    <HBox spacing="15" alignment="CENTER">
-        <Label fx:id="lblInvestigacao" text="Investigação: 0" prefWidth="200"/>
-        <Button text="+" onAction="#adicionarInvestigacao"/>
+
+    <!-- Investigação -->
+    <HBox spacing="10" alignment="CENTER">
+        <Label fx:id="lblInvestigacao" text="Investigação: 0" prefWidth="220"/>
+        <Button text="+" onAction="#adicionarInvestigacao"
+                style="-fx-background-color: #27ae60; -fx-text-fill: white; -fx-font-weight: bold; -fx-min-width: 32;"/>
+        <Button text="−" onAction="#removerInvestigacao"
+                style="-fx-background-color: #c0392b; -fx-text-fill: white; -fx-font-weight: bold; -fx-min-width: 32;"/>
     </HBox>
-    <HBox spacing="15" alignment="CENTER">
-        <Label fx:id="lblPoderParanormal" text="Poder Paranormal: 0" prefWidth="200"/>
-        <Button text="+" onAction="#adicionarPoderParanormal"/>
+
+    <!-- Poder Paranormal -->
+    <HBox spacing="10" alignment="CENTER">
+        <Label fx:id="lblPoderParanormal" text="Poder Paranormal: 0" prefWidth="220"/>
+        <Button text="+" onAction="#adicionarPoderParanormal"
+                style="-fx-background-color: #27ae60; -fx-text-fill: white; -fx-font-weight: bold; -fx-min-width: 32;"/>
+        <Button text="−" onAction="#removerPoderParanormal"
+                style="-fx-background-color: #c0392b; -fx-text-fill: white; -fx-font-weight: bold; -fx-min-width: 32;"/>
     </HBox>
 
     <HBox spacing="30" alignment="CENTER">
@@ -49,7 +65,9 @@
                style="-fx-text-fill: #2980b9;"/>
     </HBox>
 
-    <Button text="Confirmar e Voltar ao Menu" prefWidth="220" onAction="#confirmar"
-            style="-fx-font-size: 14px;"/>
+    <Label text="⚠ O botão (−) só remove pontos alocados nesta sessão."
+           style="-fx-font-size: 11px; -fx-text-fill: #7f8c8d; -fx-font-style: italic;"/>
 
+    <Button text="Confirmar e Voltar ao Menu" prefWidth="240" onAction="#confirmar"
+            style="-fx-font-size: 14px;"/>
 </VBox>

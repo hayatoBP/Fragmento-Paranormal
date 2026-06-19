@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="720.0" prefWidth="1280.0" style="-fx-background-color: #2c2c2c;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <ImageView fx:id="imgFundoMapa" fitHeight="720.0" fitWidth="1280.0" pickOnBounds="true" preserveRatio="false" />
+      <Label fx:id="lblTituloMissao" alignment="CENTER" layoutX="14.0" layoutY="14.0" prefHeight="40.0" prefWidth="1252.0" text="Título da Missão" textFill="WHITE">
+         <font>
+            <Font name="System Bold" size="24.0" />
+         </font>
+      </Label>
+      <Button fx:id="btnVoltar" layoutX="14.0" layoutY="666.0" mnemonicParsing="false" onAction="#voltarParaMissao" prefHeight="40.0" prefWidth="150.0" text="Voltar" />
+      
+      <!-- VBox para os locais do mapa - será preenchido dinamicamente pelo controller -->
+      <VBox fx:id="vboxLocais" alignment="TOP_CENTER" layoutX="100.0" layoutY="80.0" prefHeight="550.0" prefWidth="1080.0" spacing="10.0" />
+      
+      <!-- Detalhes do local selecionado (opcional, pode ser uma popup ou outra área) -->
+      <VBox fx:id="vboxDetalhesLocal" layoutX="1000.0" layoutY="80.0" prefHeight="550.0" prefWidth="250.0" style="-fx-background-color: rgba(0,0,0,0.5); -fx-padding: 10;" visible="false">
+          <Label fx:id="lblNomeLocal" text="Nome do Local" textFill="WHITE">
+              <font><Font name="System Bold" size="18.0" /></font>
+          </Label>
+          <Label fx:id="lblDescricaoLocal" text="Descrição do Local" textFill="WHITE" wrapText="true" />
+          <Label fx:id="lblStatusPagina" text="Página: Não Encontrada" textFill="WHITE" />
+          <Button fx:id="btnAvancarLocal" text="Avançar para Local" onAction="#avancarParaLocal" disable="true" />
+      </VBox>
+   </children>
+</AnchorPane>
