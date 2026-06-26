@@ -2,96 +2,234 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.effect.*?>
+<?import javafx.geometry.*?>
 
-<BorderPane xmlns="http://javafx.com/javafx/21"
-            xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="com.mycompany.fragmentoparanormal.controller.CombateController"
-            style="-fx-background-color: #1a1a2e;">
+<StackPane xmlns="http://javafx.com/javafx/21"
+           xmlns:fx="http://javafx.com/fxml/1"
+           fx:id="rootPane"
+           fx:controller="com.mycompany.fragmentoparanormal.controller.CombateController"
+           prefWidth="1024" prefHeight="700"
+           style="-fx-background-color: #000;">
 
-    <!-- ── TOPO: status ── -->
-    <top>
-        <VBox alignment="CENTER" spacing="4"
-              style="-fx-padding: 12; -fx-background-color: #16213e; -fx-border-color: #333; -fx-border-width: 0 0 1 0;">
-            <Label fx:id="lblNomeInimigo" text="Inimigo"
-                   style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #e0d0ff;"/>
-            <HBox alignment="CENTER" spacing="30">
-                <Label fx:id="lblVidaJogador" text="Vida: 100/100"
-                       style="-fx-font-size: 14px; -fx-text-fill: #e74c3c; -fx-font-weight: bold;"/>
-                <Label fx:id="lblPEJogador" text="PE: 30/30"
-                       style="-fx-font-size: 14px; -fx-text-fill: #3498db; -fx-font-weight: bold;"/>
-                <Label fx:id="lblVidaInimigo" text="Vida: 50"
-                       style="-fx-font-size: 14px; -fx-text-fill: #8e44ad; -fx-font-weight: bold;"/>
-                <Label fx:id="lblElementoInimigo" text="Elemento: ?"
-                       style="-fx-font-size: 13px; -fx-text-fill: #bdc3c7;"/>
-                <Label fx:id="lblAmaldicao" text="" visible="false"
-                       style="-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: #e74c3c;"/>
-            </HBox>
-        </VBox>
-    </top>
+    <!-- Cenário de batalha ao fundo em tela cheia -->
+    <ImageView fx:id="imgCenarioCombate" fitWidth="1024" fitHeight="700" preserveRatio="false"/>
 
-    <!-- ── CENTRO: imagens + log ── -->
-    <center>
-        <VBox alignment="CENTER" spacing="12" style="-fx-padding: 16;">
-            <HBox alignment="CENTER" spacing="60">
-                <ImageView fx:id="imgJogador" fitWidth="160" fitHeight="200" preserveRatio="true"/>
-                <Label text="VS" style="-fx-font-size: 28px; -fx-font-weight: bold; -fx-text-fill: #ecf0f1;"/>
-                <ImageView fx:id="imgInimigo" fitWidth="160" fitHeight="200" preserveRatio="true"/>
-            </HBox>
-            <Label fx:id="lblEfetividade" text=""
-                   style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #e67e22;"/>
-            <Label fx:id="lblEventos" text="O combate começa!"
-                   wrapText="true" maxWidth="700"
-                   style="-fx-font-size: 14px; -fx-padding: 0 30; -fx-text-fill: #ecf0f1;"/>
-        </VBox>
-    </center>
+    <!-- Overlay gradiente dramático -->
+    <VBox style="-fx-background-color: linear-gradient(to bottom,
+                    rgba(10,0,0,0.75) 0%,
+                    rgba(0,0,0,0.3) 30%,
+                    rgba(0,0,0,0.3) 60%,
+                    rgba(10,0,0,0.85) 100%);"/>
 
-    <!-- ── BAIXO: botões ── -->
-    <bottom>
-        <VBox spacing="8" alignment="CENTER" style="-fx-padding: 12; -fx-background-color: #16213e; -fx-border-color: #333; -fx-border-width: 1 0 0 0;">
+    <BorderPane style="-fx-background-color: transparent;">
 
-            <!-- Linha 1: botão ATACAR (abre o submenu) + Inventário + Fugir + Continuar -->
-            <HBox fx:id="painelPrincipal" alignment="CENTER" spacing="12">
-                <Button fx:id="btnAtacar" text="⚔  Atacar" prefWidth="130" onAction="#mostrarMenuAtaque"
-                        style="-fx-background-color: #c0392b; -fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold;"/>
-                <Button text="🎒  Inventário" prefWidth="130" onAction="#abrirInventario"
-                        style="-fx-background-color: #6c3483; -fx-text-fill: white; -fx-font-size: 14px;"/>
-                <Button fx:id="btnFugir" text="🏃  Fugir" prefWidth="130" onAction="#fugir"
-                        style="-fx-background-color: #555; -fx-text-fill: #e74c3c; -fx-font-size: 14px;"/>
-                <Button fx:id="btnVoltarMissao" text="✔  Continuar" prefWidth="130" onAction="#voltarMissao"
-                        visible="false"
-                        style="-fx-background-color: #27ae60; -fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold;"/>
-            </HBox>
+        <!-- ── TOPO: HUD de status ── -->
+        <top>
+            <VBox alignment="CENTER" spacing="6"
+                  style="-fx-padding: 10 20;
+                         -fx-background-color: rgba(10,0,0,0.82);
+                         -fx-border-color: #8b0000;
+                         -fx-border-width: 0 0 2 0;">
 
-            <!-- Linha 2: submenu de ataque (visível só após clicar Atacar) -->
-            <HBox fx:id="painelMenuAtaque" alignment="CENTER" spacing="10" visible="false" managed="false">
-                <Label text="▶" style="-fx-text-fill: #f39c12; -fx-font-size: 13px;"/>
+                <Label fx:id="lblNomeInimigo" text="Inimigo"
+                       style="-fx-font-size: 22px; -fx-font-weight: bold;
+                              -fx-text-fill: #f0c0c0;
+                              -fx-effect: dropshadow(gaussian, #8b0000, 10, 0.6, 0, 0);"/>
 
-                <!-- Ataque com Arma -->
-                <Button fx:id="btnAtaqueArma" text="🗡  Arma" prefWidth="140" onAction="#atacarComArma"
-                        style="-fx-background-color: #c0392b; -fx-text-fill: white; -fx-font-size: 13px;"/>
+                <HBox alignment="CENTER" spacing="40">
+                    <!-- Vida do jogador com barra visual -->
+                    <VBox alignment="CENTER" spacing="2">
+                        <Label fx:id="lblVidaJogador" text="❤ 100/100"
+                               style="-fx-font-size: 14px; -fx-text-fill: #ff4444;
+                                      -fx-font-weight: bold;"/>
+                    </VBox>
 
-                <!-- Ataque Especial -->
-                <Button fx:id="btnAtaqueEspecial" text="💥  Especial" prefWidth="140" onAction="#atacarEspecial"
-                        style="-fx-background-color: #e67e22; -fx-text-fill: white; -fx-font-size: 13px;"/>
+                    <Label text="⚡" style="-fx-font-size: 18px; -fx-text-fill: #555;"/>
 
-                <!-- Ritual -->
-                <Button fx:id="btnRitual" text="☽  Ritual" prefWidth="140" onAction="#usarRitual"
-                        style="-fx-background-color: #1abc9c; -fx-text-fill: white; -fx-font-size: 13px;"/>
+                    <!-- PE do jogador -->
+                    <VBox alignment="CENTER" spacing="2">
+                        <Label fx:id="lblPEJogador" text="⚡ 30/30"
+                               style="-fx-font-size: 14px; -fx-text-fill: #4488ff;
+                                      -fx-font-weight: bold;"/>
+                    </VBox>
 
-                <!-- Amaldiçoar Arma (visível apenas para Combatente nível 5+) -->
-                <Button fx:id="btnAmaldicoar" text="🔥  Amaldiçoar" prefWidth="140"
-                        visible="false" managed="false" onAction="#amaldicoarArma"
-                        style="-fx-background-color: #8e44ad; -fx-text-fill: white; -fx-font-size: 13px;"/>
+                    <Label text="⚡" style="-fx-font-size: 18px; -fx-text-fill: #555;"/>
 
-                <!-- Cancelar -->
-                <Button text="✕" prefWidth="50" onAction="#fecharMenuAtaque"
-                        style="-fx-background-color: #444; -fx-text-fill: #ccc; -fx-font-size: 13px;"/>
-            </HBox>
+                    <!-- Vida do inimigo -->
+                    <VBox alignment="CENTER" spacing="2">
+                        <Label fx:id="lblVidaInimigo" text="☠ 50"
+                               style="-fx-font-size: 14px; -fx-text-fill: #cc44cc;
+                                      -fx-font-weight: bold;"/>
+                    </VBox>
 
-            <!-- Dicas do submenu -->
-            <Label fx:id="lblDicaAtaque" text="" wrapText="true"
-                   style="-fx-font-size: 11px; -fx-text-fill: #7f8c8d; -fx-padding: 0 20;"/>
-        </VBox>
-    </bottom>
+                    <Label fx:id="lblElementoInimigo" text="Elemento: ?"
+                           style="-fx-font-size: 13px; -fx-text-fill: #bdc3c7;"/>
 
-</BorderPane>
+                    <Label fx:id="lblAmaldicao" text="" visible="false"
+                           style="-fx-font-size: 13px; -fx-font-weight: bold;
+                                  -fx-text-fill: #ff6600;
+                                  -fx-effect: dropshadow(gaussian, #ff3300, 6, 0.5, 0, 0);"/>
+                </HBox>
+            </VBox>
+        </top>
+
+        <!-- ── CENTRO: arena de batalha ── -->
+        <center>
+            <VBox alignment="CENTER" spacing="8" style="-fx-padding: 10 20;">
+
+                <!-- Indicador de efetividade -->
+                <Label fx:id="lblEfetividade" text=""
+                       style="-fx-font-size: 18px; -fx-font-weight: bold;
+                              -fx-text-fill: #ffcc00;
+                              -fx-effect: dropshadow(gaussian, black, 6, 0.8, 0, 0);"/>
+
+                <!-- Arena: jogador VS inimigo -->
+                <HBox alignment="BOTTOM_CENTER" spacing="40" style="-fx-padding: 0 40;">
+
+                    <!-- Jogador -->
+                    <VBox alignment="BOTTOM_CENTER" spacing="4">
+                        <Label text="VOCÊ"
+                               style="-fx-font-size: 11px; -fx-font-weight: bold;
+                                      -fx-text-fill: #88ccff; -fx-padding: 2 8;
+                                      -fx-background-color: rgba(0,80,160,0.6);
+                                      -fx-background-radius: 4;"/>
+                        <ImageView fx:id="imgJogador"
+                                   fitWidth="200" fitHeight="260"
+                                   preserveRatio="true"/>
+                    </VBox>
+
+                    <!-- VS central -->
+                    <VBox alignment="CENTER" spacing="6">
+                        <Label text="VS"
+                               style="-fx-font-size: 36px; -fx-font-weight: bold;
+                                      -fx-text-fill: white;
+                                      -fx-effect: dropshadow(gaussian, #8b0000, 12, 0.8, 0, 0);"/>
+                        <Label text="⚔"
+                               style="-fx-font-size: 24px; -fx-text-fill: #cc4444;"/>
+                    </VBox>
+
+                    <!-- Inimigo -->
+                    <VBox alignment="BOTTOM_CENTER" spacing="4">
+                        <Label fx:id="lblNomeInimigoArena" text="INIMIGO"
+                               style="-fx-font-size: 11px; -fx-font-weight: bold;
+                                      -fx-text-fill: #ffaaaa; -fx-padding: 2 8;
+                                      -fx-background-color: rgba(140,0,0,0.6);
+                                      -fx-background-radius: 4;"/>
+                        <ImageView fx:id="imgInimigo"
+                                   fitWidth="200" fitHeight="260"
+                                   preserveRatio="true"/>
+                    </VBox>
+                </HBox>
+
+                <!-- Log de eventos -->
+                <Label fx:id="lblEventos" text="O combate começa!"
+                       wrapText="true" maxWidth="750"
+                       style="-fx-font-size: 14px;
+                              -fx-text-fill: #f0f0f0;
+                              -fx-background-color: rgba(0,0,0,0.72);
+                              -fx-padding: 10 20;
+                              -fx-background-radius: 6;
+                              -fx-border-color: #8b0000;
+                              -fx-border-width: 1;
+                              -fx-border-radius: 6;"/>
+            </VBox>
+        </center>
+
+        <!-- ── BAIXO: botões de ação ── -->
+        <bottom>
+            <VBox spacing="8" alignment="CENTER"
+                  style="-fx-padding: 10 20;
+                         -fx-background-color: rgba(10,0,0,0.88);
+                         -fx-border-color: #8b0000;
+                         -fx-border-width: 2 0 0 0;">
+
+                <!-- Linha 1: botões principais -->
+                <HBox fx:id="painelPrincipal" alignment="CENTER" spacing="14">
+                    <Button fx:id="btnAtacar" text="⚔  Atacar" prefWidth="140"
+                            onAction="#mostrarMenuAtaque"
+                            style="-fx-background-color: #8b0000;
+                                   -fx-text-fill: white;
+                                   -fx-font-size: 14px; -fx-font-weight: bold;
+                                   -fx-border-radius: 5; -fx-background-radius: 5;
+                                   -fx-cursor: hand; -fx-padding: 8 16;
+                                   -fx-effect: dropshadow(gaussian, #ff0000, 4, 0.3, 0, 0);"/>
+                    <Button text="🎒  Inventário" prefWidth="140"
+                            onAction="#abrirInventario"
+                            style="-fx-background-color: #3d0000;
+                                   -fx-text-fill: #ffaaaa;
+                                   -fx-font-size: 14px;
+                                   -fx-border-color: #8b0000; -fx-border-width: 1;
+                                   -fx-border-radius: 5; -fx-background-radius: 5;
+                                   -fx-cursor: hand; -fx-padding: 8 16;"/>
+                    <Button fx:id="btnFugir" text="🏃  Fugir" prefWidth="140"
+                            onAction="#fugir"
+                            style="-fx-background-color: transparent;
+                                   -fx-text-fill: #cc3333;
+                                   -fx-font-size: 14px;
+                                   -fx-border-color: #cc3333; -fx-border-width: 1;
+                                   -fx-border-radius: 5; -fx-background-radius: 5;
+                                   -fx-cursor: hand; -fx-padding: 8 16;"/>
+                </HBox>
+
+                <!-- Botão de Continuar (pós-combate) -->
+                <Button fx:id="btnVoltarMissao" text="✔  Continuar"
+                        prefWidth="220" onAction="#voltarMissao"
+                        visible="false" managed="false"
+                        style="-fx-background-color: #27ae60;
+                               -fx-text-fill: white;
+                               -fx-font-size: 16px; -fx-font-weight: bold;
+                               -fx-padding: 10 24;
+                               -fx-border-radius: 6; -fx-background-radius: 6;
+                               -fx-cursor: hand;
+                               -fx-effect: dropshadow(gaussian, #00ff88, 6, 0.4, 0, 0);"/>
+
+                <!-- Linha 2: submenu de ataque -->
+                <HBox fx:id="painelMenuAtaque" alignment="CENTER" spacing="10"
+                      visible="false" managed="false">
+                    <Label text="▶" style="-fx-text-fill: #ff9900; -fx-font-size: 14px;"/>
+
+                    <Button fx:id="btnAtaqueArma" text="🗡  Arma" prefWidth="150"
+                            onAction="#atacarComArma"
+                            style="-fx-background-color: #8b0000;
+                                   -fx-text-fill: white; -fx-font-size: 13px;
+                                   -fx-border-radius: 5; -fx-background-radius: 5;
+                                   -fx-cursor: hand; -fx-padding: 7 12;"/>
+
+                    <Button fx:id="btnAtaqueEspecial" text="💥  Especial" prefWidth="150"
+                            onAction="#atacarEspecial"
+                            style="-fx-background-color: #cc5500;
+                                   -fx-text-fill: white; -fx-font-size: 13px;
+                                   -fx-border-radius: 5; -fx-background-radius: 5;
+                                   -fx-cursor: hand; -fx-padding: 7 12;"/>
+
+                    <Button fx:id="btnRitual" text="☽  Ritual" prefWidth="150"
+                            onAction="#usarRitual"
+                            style="-fx-background-color: #6a0dad;
+                                   -fx-text-fill: white; -fx-font-size: 13px;
+                                   -fx-border-radius: 5; -fx-background-radius: 5;
+                                   -fx-cursor: hand; -fx-padding: 7 12;"/>
+
+                    <Button fx:id="btnAmaldicoar" text="🔥  Amaldiçoar" prefWidth="150"
+                            visible="false" managed="false" onAction="#amaldicoarArma"
+                            style="-fx-background-color: #8e44ad;
+                                   -fx-text-fill: white; -fx-font-size: 13px;
+                                   -fx-border-radius: 5; -fx-background-radius: 5;
+                                   -fx-cursor: hand; -fx-padding: 7 12;"/>
+
+                    <Button text="✕" prefWidth="50" onAction="#fecharMenuAtaque"
+                            style="-fx-background-color: #333;
+                                   -fx-text-fill: #ccc; -fx-font-size: 14px;
+                                   -fx-border-radius: 5; -fx-background-radius: 5;
+                                   -fx-cursor: hand;"/>
+                </HBox>
+
+                <!-- Dica do submenu -->
+                <Label fx:id="lblDicaAtaque" text="" wrapText="true"
+                       style="-fx-font-size: 11px; -fx-text-fill: #888;
+                              -fx-padding: 0 20;"/>
+            </VBox>
+        </bottom>
+
+    </BorderPane>
+</StackPane>

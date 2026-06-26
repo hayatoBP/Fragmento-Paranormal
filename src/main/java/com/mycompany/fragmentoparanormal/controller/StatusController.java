@@ -3,6 +3,8 @@ package com.mycompany.fragmentoparanormal.controller;
 import com.mycompany.fragmentoparanormal.model.Personagem;
 import com.mycompany.fragmentoparanormal.service.LojaService;
 import com.mycompany.fragmentoparanormal.util.GameState;
+import com.mycompany.fragmentoparanormal.util.MusicaManager;
+import com.mycompany.fragmentoparanormal.util.SomUtil;
 import com.mycompany.fragmentoparanormal.util.TelaUtil;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -41,29 +43,21 @@ public class StatusController {
 
     @FXML
     public void initialize() {
+        MusicaManager.tocarResto();
         jogador = GameContext.jogadorAtual;
 
         boolean fuga    = GameState.isVeioDeFuga();
         boolean morreu  = GameState.isVeioDeDerrota();
 
-        if (fuga) {
-            // ── Aplicar penalidades ────────────────────────────────────────
-            // 1. Perde páginas da missão atual
-            GameState.perderPaginasParcial(false);
-            GameState.setMissaoEmAndamento(false);
+        if (fuga || morreu) {
+            // Penalidades já foram aplicadas em CombateController.finalizarCombate() ou MissaoController.fugir()
+            // Aqui apenas mostramos a mensagem e cuidamos da loja
 
-            // 2. Perde 25% do dinheiro (arredondado para baixo)
-            if (jogador != null) {
-                int perda = jogador.getDinheiro() / 4;
-                jogador.setDinheiro(jogador.getDinheiro() - perda);
-            }
-
-            // 3. Ao morrer: reseta a loja também
+            // Ao morrer ou fugir: reseta a loja também
             if (morreu) {
                 LojaService.resetar();
             }
 
-            // ── Montar mensagem de penalidade ──────────────────────────────
             if (morreu) {
                 lblTitulo.setText("Você foi derrotado");
                 lblMensagemFuga.setText(
@@ -78,7 +72,7 @@ public class StatusController {
                 lblMensagemFuga.setText(
                     "Uma noite difícil...\nVocê teve que voltar para a Ordem.\n\n" +
                     "⚠  Páginas desta missão foram perdidas.\n" +
-                    "💰  25% do seu dinheiro foi perdido.\n" +
+                    "💰  10% do seu dinheiro foi perdido.\n" +
                     "✔  Seu nível, atributos, itens e loja permanecem."
                 );
             }
@@ -104,14 +98,22 @@ public class StatusController {
 
     @FXML
     private void confirmarFuga(ActionEvent event) {
+        SomUtil.tocarConfirmar();
         GameState.setVeioDeFuga(false);
-        TelaUtil.trocarTela(event, "/com/mycompany/fragmentoparanormal/view/menuMissoes.fxml");
+        // Se o jogador tiver escolha de habilidade pendente, redireciona para ela primeiro
+        if (GameContext.jogadorAtual != null && GameContext.jogadorAtual.isEscolhaPendente()) {
+            EscolhaHabilidadeController.telaOrigem = "STATUS";
+            TelaUtil.trocarTela(event, "/com/mycompany/fragmentoparanormal/view/escolhaHabilidade.fxml");
+        } else {
+            TelaUtil.trocarTela(event, "/com/mycompany/fragmentoparanormal/view/menuMissoes.fxml");
+        }
     }
 
     // ── Botões (+) ────────────────────────────────────────────────────
 
     @FXML
     private void adicionarForca() {
+        SomUtil.tocarConfirmar();
         if (jogador != null && jogador.getPontosAtributo() > 0) {
             jogador.setForca(jogador.getForca() + 1);
             jogador.setPontosAtributo(jogador.getPontosAtributo() - 1);
@@ -121,6 +123,7 @@ public class StatusController {
 
     @FXML
     private void adicionarInvestigacao() {
+        SomUtil.tocarConfirmar();
         if (jogador != null && jogador.getPontosAtributo() > 0) {
             jogador.setInvestigacao(jogador.getInvestigacao() + 1);
             jogador.setPontosAtributo(jogador.getPontosAtributo() - 1);
@@ -130,6 +133,7 @@ public class StatusController {
 
     @FXML
     private void adicionarPoderParanormal() {
+        SomUtil.tocarConfirmar();
         if (jogador != null && jogador.getPontosAtributo() > 0) {
             jogador.setPoderParanormal(jogador.getPoderParanormal() + 1);
             jogador.setPontosAtributo(jogador.getPontosAtributo() - 1);
@@ -141,6 +145,7 @@ public class StatusController {
 
     @FXML
     private void removerForca() {
+        SomUtil.tocarVoltar();
         if (jogador != null && jogador.getForca() > forcaOriginal) {
             jogador.setForca(jogador.getForca() - 1);
             jogador.setPontosAtributo(jogador.getPontosAtributo() + 1);
@@ -150,6 +155,7 @@ public class StatusController {
 
     @FXML
     private void removerInvestigacao() {
+        SomUtil.tocarVoltar();
         if (jogador != null && jogador.getInvestigacao() > investigacaoOriginal) {
             jogador.setInvestigacao(jogador.getInvestigacao() - 1);
             jogador.setPontosAtributo(jogador.getPontosAtributo() + 1);
@@ -159,6 +165,7 @@ public class StatusController {
 
     @FXML
     private void removerPoderParanormal() {
+        SomUtil.tocarVoltar();
         if (jogador != null && jogador.getPoderParanormal() > poderParanormalOriginal) {
             jogador.setPoderParanormal(jogador.getPoderParanormal() - 1);
             jogador.setPontosAtributo(jogador.getPontosAtributo() + 1);
@@ -170,8 +177,15 @@ public class StatusController {
 
     @FXML
     private void confirmar(ActionEvent event) {
+        SomUtil.tocarConfirmar();
         GameState.setVeioDeFuga(false);
-        TelaUtil.trocarTela(event, "/com/mycompany/fragmentoparanormal/view/menuMissoes.fxml");
+        // Se o jogador tiver escolha de habilidade pendente, redireciona para ela primeiro
+        if (GameContext.jogadorAtual != null && GameContext.jogadorAtual.isEscolhaPendente()) {
+            EscolhaHabilidadeController.telaOrigem = "STATUS";
+            TelaUtil.trocarTela(event, "/com/mycompany/fragmentoparanormal/view/escolhaHabilidade.fxml");
+        } else {
+            TelaUtil.trocarTela(event, "/com/mycompany/fragmentoparanormal/view/menuMissoes.fxml");
+        }
     }
 
     // ── Atualização da tela ───────────────────────────────────────────

@@ -3,48 +3,106 @@
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane xmlns="http://javafx.com/javafx/21"
-            xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="com.mycompany.fragmentoparanormal.controller.MissaoController">
+<StackPane xmlns="http://javafx.com/javafx/21"
+           xmlns:fx="http://javafx.com/fxml/1"
+           fx:id="rootPane"
+           prefWidth="1024" prefHeight="700"
+           fx:controller="com.mycompany.fragmentoparanormal.controller.MissaoController"
+           style="-fx-background-color: #000;">
 
-    <top>
-        <VBox alignment="CENTER" spacing="6" style="-fx-padding: 14;">
-            <Label fx:id="lblNomeMissao" text="Missão"
-                   style="-fx-font-size: 26px; -fx-font-weight: bold;"/>
-            <Label fx:id="lblFragmentos" text="Páginas: 0/2"
-                   style="-fx-font-size: 16px;"/>
-            <HBox alignment="CENTER" spacing="20">
-                <Label fx:id="lblVida"  text="Vida: 100/100"
-                       style="-fx-font-size: 14px; -fx-text-fill: #c0392b;"/>
-                <Label fx:id="lblPE"    text="PE: 30/30"
-                       style="-fx-font-size: 14px; -fx-text-fill: #2980b9;"/>
+    <!-- Cenário em tela inteira -->
+    <ImageView fx:id="imgCena" fitWidth="1024" fitHeight="700" preserveRatio="false"/>
+
+    <!-- Overlay escuro nos cantos para legibilidade -->
+    <VBox style="-fx-background-color: linear-gradient(to bottom,
+                    rgba(0,0,0,0.75) 0%, transparent 35%,
+                    transparent 55%, rgba(0,0,0,0.88) 100%);"/>
+
+
+    <!-- Personagem do jogador — visível na tela de investigação -->
+    <ImageView fx:id="imgPersonagemMissao"
+               fitWidth="240" fitHeight="420"
+               preserveRatio="true"
+               visible="true"
+               StackPane.alignment="BOTTOM_LEFT"
+               translateX="20" translateY="0"/>
+
+    <BorderPane>
+        <!-- HUD topo -->
+        <top>
+            <HBox alignment="CENTER_LEFT" spacing="20"
+                  style="-fx-padding: 14 24; -fx-background-color: rgba(0,0,0,0.0);">
+                <!-- Ícone elemento -->
+                <ImageView fx:id="imgElementoIcone" fitWidth="32" fitHeight="32" preserveRatio="true"/>
+                <VBox spacing="2">
+                    <Label fx:id="lblNomeMissao" text="Missão"
+                           style="-fx-font-size: 20px; -fx-font-weight: bold;
+                                  -fx-text-fill: white;"/>
+                    <Label fx:id="lblFragmentos" text="Páginas: 0/6"
+                           style="-fx-font-size: 13px; -fx-text-fill: #cc4444;"/>
+                </VBox>
+                <Region HBox.hgrow="ALWAYS"/>
+                <HBox spacing="20">
+                    <Label fx:id="lblVida"  text="❤ 100/100"
+                           style="-fx-font-size: 14px; -fx-text-fill: #ff4444;
+                                  -fx-font-weight: bold;"/>
+                    <Label fx:id="lblPE"    text="⚡ 30/30"
+                           style="-fx-font-size: 14px; -fx-text-fill: #4488ff;
+                                  -fx-font-weight: bold;"/>
+                </HBox>
             </HBox>
-        </VBox>
-    </top>
+        </top>
 
-    <center>
-        <VBox alignment="CENTER" spacing="16">
-            <Label fx:id="lblEventos"
-                   text="Você entrou em uma sala escura..."
-                   wrapText="true"
-                   style="-fx-font-size: 15px; -fx-padding: 0 20;"
-                   maxWidth="700"/>
-            <ImageView fx:id="imgCena"
-                       fitWidth="350" fitHeight="230"
-                       preserveRatio="true"/>
-        </VBox>
-    </center>
+        <!-- Caixa de eventos (centro-baixo) -->
+        <center>
+            <VBox alignment="BOTTOM_CENTER">
+                <Region VBox.vgrow="ALWAYS"/>
+                <Label fx:id="lblEventos" wrapText="true" maxWidth="800"
+                       style="-fx-font-size: 15px; -fx-text-fill: #f0f0f0;
+                              -fx-background-color: rgba(0,0,0,0.6);
+                              -fx-padding: 12 20; -fx-background-radius: 6;
+                              -fx-border-color: #8b0000; -fx-border-width: 1;
+                              -fx-border-radius: 6;"/>
+                <VBox.margin><javafx.geometry.Insets bottom="10"/></VBox.margin>
+            </VBox>
+        </center>
 
-    <bottom>
-        <HBox alignment="CENTER" spacing="14" style="-fx-padding: 18;">
-            <Button fx:id="btnAvancar"    text="Avançar"    prefWidth="120" onAction="#avancar"/>
-            <Button fx:id="btnInvestigar" text="Investigar" prefWidth="120" onAction="#investigar"/>
-            <Button text="Inventário"     prefWidth="120" onAction="#abrirInventario"/>
-            <Button text="📖 Diário"      prefWidth="120" onAction="#abrirDiario"/>
-            <Button text="✦ Campo"       prefWidth="120" onAction="#abrirHabilidadesCampo"/>
-            <Button text="Fugir"          prefWidth="120" onAction="#fugir"
-                    style="-fx-text-fill: #c0392b;"/>
-        </HBox>
-    </bottom>
-
-</BorderPane>
+        <!-- Botões na base -->
+        <bottom>
+            <HBox alignment="CENTER" spacing="10"
+                  style="-fx-padding: 14 20;
+                         -fx-background-color: rgba(0,0,0,0.82);
+                         -fx-border-color: #8b0000; -fx-border-width: 1 0 0 0;">
+                <Button fx:id="btnAvancar" text="⚔ Avançar" prefWidth="130" onAction="#avancar"
+                        style="-fx-background-color: #8b0000; -fx-text-fill: white;
+                               -fx-font-weight: bold; -fx-font-size: 13px;
+                               -fx-border-radius: 4; -fx-background-radius: 4; -fx-cursor: hand;"/>
+                <Button fx:id="btnInvestigar" text="🔍 Investigar" prefWidth="130" onAction="#investigar"
+                        style="-fx-background-color: #3d0000; -fx-text-fill: #ff8888;
+                               -fx-font-weight: bold; -fx-font-size: 13px;
+                               -fx-border-color: #8b0000; -fx-border-width: 1;
+                               -fx-border-radius: 4; -fx-background-radius: 4; -fx-cursor: hand;"/>
+                <Button text="🗺 Mapa" prefWidth="100" onAction="#abrirMapa"
+                        style="-fx-background-color: #1a0000; -fx-text-fill: #cc4444;
+                               -fx-border-color: #8b0000; -fx-border-width: 1;
+                               -fx-border-radius: 4; -fx-background-radius: 4; -fx-cursor: hand;"/>
+                <Button text="🎒 Inventário" prefWidth="110" onAction="#abrirInventario"
+                        style="-fx-background-color: #1a0000; -fx-text-fill: #aaa;
+                               -fx-border-color: #555; -fx-border-width: 1;
+                               -fx-border-radius: 4; -fx-background-radius: 4; -fx-cursor: hand;"/>
+                <Button text="📖 Diário" prefWidth="110" onAction="#abrirDiario"
+                        style="-fx-background-color: #1a0000; -fx-text-fill: #aaa;
+                               -fx-border-color: #555; -fx-border-width: 1;
+                               -fx-border-radius: 4; -fx-background-radius: 4; -fx-cursor: hand;"/>
+                <Button text="✦ Campo" prefWidth="110" onAction="#abrirHabilidadesCampo"
+                        style="-fx-background-color: #1a0000; -fx-text-fill: #aaa;
+                               -fx-border-color: #555; -fx-border-width: 1;
+                               -fx-border-radius: 4; -fx-background-radius: 4; -fx-cursor: hand;"/>
+                <Button text="Fugir" prefWidth="90" onAction="#fugir"
+                        style="-fx-background-color: transparent; -fx-text-fill: #cc3333;
+                               -fx-border-color: #cc3333; -fx-border-width: 1;
+                               -fx-border-radius: 4; -fx-background-radius: 4; -fx-cursor: hand;"/>
+            </HBox>
+        </bottom>
+    </BorderPane>
+</StackPane>

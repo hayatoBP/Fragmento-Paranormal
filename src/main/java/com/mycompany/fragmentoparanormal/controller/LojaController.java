@@ -3,6 +3,8 @@ package com.mycompany.fragmentoparanormal.controller;
 import com.mycompany.fragmentoparanormal.model.ItemLoja;
 import com.mycompany.fragmentoparanormal.model.Personagem;
 import com.mycompany.fragmentoparanormal.service.LojaService;
+import com.mycompany.fragmentoparanormal.util.MusicaManager;
+import com.mycompany.fragmentoparanormal.util.SomUtil;
 import com.mycompany.fragmentoparanormal.util.TelaUtil;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -21,10 +23,13 @@ public class LojaController {
 
     @FXML private Label lblDinheiro;
     @FXML private Label lblMensagem;
-    @FXML private HBox painelItens;
+    @FXML private VBox  painelIvete;
+    @FXML private VBox  painelItens;
+    @FXML private HBox  painelItensConteudo;
 
     @FXML
     public void initialize() {
+        MusicaManager.tocarIvete(); // Loja continua com a música da Ivete
         jogador = GameContext.jogadorAtual;
         atualizarInterface();
     }
@@ -37,12 +42,12 @@ public class LojaController {
     }
 
     private void renderizarItens() {
-        painelItens.getChildren().clear();
+        if (painelItensConteudo != null) painelItensConteudo.getChildren().clear();
         List<ItemLoja> itens = LojaService.getItens();
 
         for (ItemLoja item : itens) {
             VBox card = criarCardItem(item);
-            painelItens.getChildren().add(card);
+            if (painelItensConteudo != null) painelItensConteudo.getChildren().add(card);
         }
     }
 
@@ -75,6 +80,7 @@ public class LojaController {
 
         btnComprar.setOnAction(e -> {
             if (jogador.getDinheiro() >= item.getPreco()) {
+                SomUtil.tocarConfirmar();
                 jogador.setDinheiro(jogador.getDinheiro() - item.getPreco());
                 item.setComprado();
                 jogador.getInventario().adicionarItem(item.toItem());
@@ -88,7 +94,15 @@ public class LojaController {
     }
 
     @FXML
+    private void mostrarItens() {
+        if (painelIvete  != null) { painelIvete.setVisible(false);  painelIvete.setManaged(false);  }
+        if (painelItens  != null) { painelItens.setVisible(true);   painelItens.setManaged(true);   }
+        atualizarInterface();
+    }
+
+    @FXML
     private void voltar(ActionEvent event) {
+        SomUtil.tocarVoltar();
         TelaUtil.trocarTela(event, "/com/mycompany/fragmentoparanormal/view/ivete.fxml");
     }
 }

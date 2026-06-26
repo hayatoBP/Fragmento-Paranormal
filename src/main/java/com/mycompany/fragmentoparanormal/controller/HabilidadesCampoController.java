@@ -2,6 +2,8 @@ package com.mycompany.fragmentoparanormal.controller;
 
 import com.mycompany.fragmentoparanormal.model.Habilidade;
 import com.mycompany.fragmentoparanormal.model.Personagem;
+import com.mycompany.fragmentoparanormal.util.MusicaManager;
+import com.mycompany.fragmentoparanormal.util.SomUtil;
 import com.mycompany.fragmentoparanormal.util.TelaUtil;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -24,6 +26,7 @@ public class HabilidadesCampoController {
 
     @FXML
     public void initialize() {
+        MusicaManager.tocarResto();
         jogador = GameContext.jogadorAtual;
         if (jogador == null) return;
 
@@ -63,6 +66,7 @@ public class HabilidadesCampoController {
 
     @FXML
     private void usarHabilidade() {
+        SomUtil.tocarConfirmar();
         Habilidade h = listaHabilidades.getSelectionModel().getSelectedItem();
         if (h == null) return;
 
@@ -111,6 +115,7 @@ public class HabilidadesCampoController {
 
     @FXML
     private void voltar(ActionEvent event) {
+        SomUtil.tocarVoltar();
         TelaUtil.trocarTela(event, "/com/mycompany/fragmentoparanormal/view/missao.fxml");
     }
 }

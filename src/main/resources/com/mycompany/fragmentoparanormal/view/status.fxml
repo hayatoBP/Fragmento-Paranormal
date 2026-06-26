@@ -24,7 +24,7 @@
     </VBox>
 
     <!-- Nível e dinheiro -->
-    <Label fx:id="lblNivel" text="Nível: 1" style="-fx-font-weight: bold; -fx-text-fill: #f39c12;"/>
+    <Label fx:id="lblNivel" text="Nível: 1" style="-fx-font-weight: bold; -fx-text-fill: #ff9900;"/>
     <Label fx:id="lblDinheiro" text="Dinheiro: 0 moedas"
            style="-fx-font-size: 13px; -fx-text-fill: #2ecc71;"/>
 
@@ -66,7 +66,7 @@
     </HBox>
 
     <Label text="⚠ O botão (−) só remove pontos alocados nesta sessão."
-           style="-fx-font-size: 11px; -fx-text-fill: #7f8c8d; -fx-font-style: italic;"/>
+           style="-fx-font-size: 11px; -fx-text-fill: #666666; -fx-font-style: italic;"/>
 
     <Button text="Confirmar e Voltar ao Menu" prefWidth="240" onAction="#confirmar"
             style="-fx-font-size: 14px;"/>

@@ -53,6 +53,11 @@ public class ItemLoja {
         };
     }
 
+    /** Cria uma cópia nova deste item com comprado = false, para ciclos de loja frescos. */
+    public ItemLoja copiar() {
+        return new ItemLoja(nome, descricao, tipo, efeito, raridade, preco);
+    }
+
     /** Converte para Item do inventário para ser guardado. */
     public Item toItem() {
         return new Item(nome, descricao, tipo, efeito);

@@ -8,21 +8,21 @@
       xmlns="http://javafx.com/javafx/21"
       xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="com.mycompany.fragmentoparanormal.controller.RituaisController"
-      style="-fx-padding: 28; -fx-background-color: #1a1a2e;">
+      style="-fx-padding: 28; -fx-background-color: #0a0000;">
 
     <Label text="☽  Rituais Conhecidos"
-           style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: #1abc9c;"/>
+           style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: #cc4444;"/>
 
     <Label text="Selecione um ritual para ver os detalhes."
-           style="-fx-font-size: 12px; -fx-text-fill: #7f8c8d;"/>
+           style="-fx-font-size: 12px; -fx-text-fill: #666666;"/>
 
     <!-- Lista de rituais -->
     <ListView fx:id="listaRituais" prefHeight="160"
-              style="-fx-background-color: #16213e; -fx-border-color: #1abc9c; -fx-border-width: 1;"/>
+              style="-fx-background-color: #1a0000; -fx-border-color: #cc4444; -fx-border-width: 1;"/>
 
     <!-- Painel de detalhes do ritual selecionado -->
     <HBox spacing="20" alignment="CENTER_LEFT" prefHeight="270"
-          style="-fx-background-color: #16213e; -fx-border-color: #333;
+          style="-fx-background-color: #1a0000; -fx-border-color: #333;
                  -fx-border-width: 1; -fx-border-radius: 6; -fx-background-radius: 6;
                  -fx-padding: 18;">
 
@@ -30,7 +30,7 @@
         <VBox alignment="CENTER" spacing="6" prefWidth="120">
             <ImageView fx:id="imgElemento" fitWidth="96" fitHeight="96" preserveRatio="true"/>
             <Label fx:id="lblNomeElemento" text=""
-                   style="-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: #1abc9c; -fx-alignment: CENTER;"/>
+                   style="-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: #cc4444; -fx-alignment: CENTER;"/>
         </VBox>
 
         <!-- Dados do ritual -->
@@ -44,7 +44,7 @@
                 <Label fx:id="lblElemento"     style="-fx-text-fill: #ecf0f1; -fx-font-size: 12px;" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
 
                 <Label text="Custo PE:"        style="-fx-text-fill: #95a5a6; -fx-font-size: 12px;" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
-                <Label fx:id="lblCustoPE"      style="-fx-text-fill: #3498db;  -fx-font-size: 12px; -fx-font-weight: bold;" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+                <Label fx:id="lblCustoPE"      style="-fx-text-fill: #4488ff;  -fx-font-size: 12px; -fx-font-weight: bold;" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
 
                 <Label text="Dano base:"       style="-fx-text-fill: #95a5a6; -fx-font-size: 12px;" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
                 <Label fx:id="lblDanoBase"     style="-fx-text-fill: #e74c3c;  -fx-font-size: 12px; -fx-font-weight: bold;" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
@@ -65,7 +65,7 @@
                 <Label fx:id="lblFracoContra"  style="-fx-text-fill: #e74c3c; -fx-font-size: 12px; -fx-font-weight: bold;" GridPane.columnIndex="1" GridPane.rowIndex="7"/>
 
                 <Label text="   Dano fraco:"  style="-fx-text-fill: #95a5a6; -fx-font-size: 12px;" GridPane.columnIndex="0" GridPane.rowIndex="8"/>
-                <Label fx:id="lblDanoFraco"    style="-fx-text-fill: #e67e22; -fx-font-size: 12px;" GridPane.columnIndex="1" GridPane.rowIndex="8"/>
+                <Label fx:id="lblDanoFraco"    style="-fx-text-fill: #cc5500; -fx-font-size: 12px;" GridPane.columnIndex="1" GridPane.rowIndex="8"/>
             </GridPane>
         </VBox>
     </HBox>

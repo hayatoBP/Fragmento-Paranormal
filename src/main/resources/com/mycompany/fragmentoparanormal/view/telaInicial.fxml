@@ -1,20 +1,49 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <?import javafx.scene.control.*?>
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox alignment="CENTER" spacing="20" prefWidth="800" prefHeight="600"
-      xmlns="http://javafx.com/javafx/21"
-      xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="com.mycompany.fragmentoparanormal.controller.TelaInicialController">
+<StackPane xmlns="http://javafx.com/javafx/21"
+           xmlns:fx="http://javafx.com/fxml/1"
+           prefWidth="800" prefHeight="600"
+           fx:controller="com.mycompany.fragmentoparanormal.controller.TelaInicialController"
+           style="-fx-background-color: #0a0000;">
 
-    <Label text="Fragmento Paranormal"
-           style="-fx-font-size: 32px; -fx-font-weight: bold;" />
+    <!-- Fundo vermelho escuro com gradiente -->
+    <VBox alignment="CENTER" spacing="28">
 
-    <Button text="Jogar" prefWidth="200" onAction="#abrirJogar"/>
-    <Button text="Ranking" prefWidth="200" onAction="#abrirRanking"/>
-    <Button text="Créditos" prefWidth="200" onAction="#abrirCreditos"/>
-    <Button text="Encerrar" prefWidth="200" onAction="#encerrar"/>
+        <!-- Logo -->
+        <ImageView fitWidth="420" fitHeight="200" preserveRatio="true">
+            <image><Image url="@../images/logo.png"/></image>
+        </ImageView>
 
-</VBox>
+        <!-- Botões -->
+        <VBox alignment="CENTER" spacing="14">
+            <Button text="JOGAR" prefWidth="240" onAction="#abrirJogar"
+                    style="-fx-background-color: #8b0000; -fx-text-fill: white;
+                           -fx-font-size: 18px; -fx-font-weight: bold;
+                           -fx-border-color: #cc0000; -fx-border-width: 1;
+                           -fx-border-radius: 4; -fx-background-radius: 4;
+                           -fx-cursor: hand;"/>
+            <Button text="RANKING" prefWidth="240" onAction="#abrirRanking"
+                    style="-fx-background-color: #1a0000; -fx-text-fill: #cc3333;
+                           -fx-font-size: 16px; -fx-font-weight: bold;
+                           -fx-border-color: #8b0000; -fx-border-width: 1;
+                           -fx-border-radius: 4; -fx-background-radius: 4;
+                           -fx-cursor: hand;"/>
+            <Button text="CRÉDITOS" prefWidth="240" onAction="#abrirCreditos"
+                    style="-fx-background-color: #1a0000; -fx-text-fill: #cc3333;
+                           -fx-font-size: 16px; -fx-font-weight: bold;
+                           -fx-border-color: #8b0000; -fx-border-width: 1;
+                           -fx-border-radius: 4; -fx-background-radius: 4;
+                           -fx-cursor: hand;"/>
+            <Button text="ENCERRAR" prefWidth="240" onAction="#encerrar"
+                    style="-fx-background-color: #0a0000; -fx-text-fill: #555;
+                           -fx-font-size: 14px;
+                           -fx-border-color: #333; -fx-border-width: 1;
+                           -fx-border-radius: 4; -fx-background-radius: 4;
+                           -fx-cursor: hand;"/>
+        </VBox>
+
+    </VBox>
+</StackPane>

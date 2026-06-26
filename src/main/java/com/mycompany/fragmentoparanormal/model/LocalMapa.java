@@ -49,7 +49,13 @@ public class LocalMapa {
     public List<Integer> getPaginasEncontradasNoLocal() { return paginasEncontradasNoLocal; }
 
     // Setters
-    public void setPaginaEncontrada(boolean paginaEncontrada) { /* Lógica de setar página encontrada agora é feita via adicionarPaginaEncontrada */ }
+    public void setPaginaEncontrada(boolean paginaEncontrada) {
+        if (!paginaEncontrada) {
+            paginasEncontradasNoLocal.clear();
+        } else if (paginasEncontradasNoLocal.isEmpty()) {
+            paginasEncontradasNoLocal.add(ordem); // marca com índice do local
+        }
+    }
     public void setLiberado(boolean liberado) { this.liberado = liberado; }
     public void adicionarPaginaEncontrada(int pagina) {
         if (!paginasEncontradasNoLocal.contains(pagina)) {

@@ -2,6 +2,8 @@ package com.mycompany.fragmentoparanormal.controller;
 
 import com.mycompany.fragmentoparanormal.dao.JogadorDAO;
 import com.mycompany.fragmentoparanormal.model.Personagem;
+import com.mycompany.fragmentoparanormal.util.MusicaManager;
+import com.mycompany.fragmentoparanormal.util.SomUtil;
 import com.mycompany.fragmentoparanormal.util.TelaUtil;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -23,6 +25,7 @@ public class RankingController {
 
     @FXML private TableView<Personagem>          tabelaRanking;
     @FXML private TableColumn<Personagem, Integer> colPosicao;
+    @FXML private TableColumn<Personagem, String>  colElementoIcone;
     @FXML private TableColumn<Personagem, String>  colNome;
     @FXML private TableColumn<Personagem, String>  colClasse;
     @FXML private TableColumn<Personagem, String>  colElemento;
@@ -32,6 +35,7 @@ public class RankingController {
 
     @FXML
     public void initialize() {
+        MusicaManager.tocarMenuInicial(); // Ranking fica no menu, usa música do menu
         configurarColunas();
         carregarRanking();
     }
@@ -48,6 +52,26 @@ public class RankingController {
             colPosicao.setCellValueFactory(c -> {
                 int idx = tabelaRanking.getItems().indexOf(c.getValue()) + 1;
                 return new SimpleIntegerProperty(idx).asObject();
+            });
+        }
+
+        // Coluna de ícone do elemento
+        if (colElementoIcone != null) {
+            colElementoIcone.setCellValueFactory(c -> new SimpleStringProperty(
+                c.getValue().getElemento().toString().toLowerCase()));
+            colElementoIcone.setCellFactory(col -> new javafx.scene.control.TableCell<>() {
+                private final javafx.scene.image.ImageView iv = new javafx.scene.image.ImageView();
+                { iv.setFitWidth(24); iv.setFitHeight(24); iv.setPreserveRatio(true); setGraphic(iv); setText(null); }
+                @Override protected void updateItem(String elem, boolean empty) {
+                    super.updateItem(elem, empty);
+                    if (empty || elem == null) { iv.setImage(null); return; }
+                    String ext = ".png";
+                    try {
+                        var s = getClass().getResourceAsStream(
+                            "/com/mycompany/fragmentoparanormal/images/simbolos/" + elem + ext);
+                        iv.setImage(s != null ? new javafx.scene.image.Image(s) : null);
+                    } catch (Exception e) { iv.setImage(null); }
+                }
             });
         }
     }
@@ -76,6 +100,7 @@ public class RankingController {
 
     @FXML
     private void voltar(ActionEvent event) {
+        SomUtil.tocarVoltar();
         TelaUtil.trocarTela(event, "/com/mycompany/fragmentoparanormal/view/telaInicial.fxml");
     }
 }

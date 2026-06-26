@@ -1,3 +1,6 @@
-Ordem Paranormal;Agente, detectamos uma anomalia de sangue na área.
-Ordem Paranormal;Colete os fragmentos e elimine as ameaças.
-Agente;Entendido. Missão aceita.
+Ordem Paranormal;Agente,
+Ordem Paranormal;Recebemos relatos de atividade paranormal em um hospital abandonado nos arredores da cidade.
+Ordem Paranormal;Há mais de vinte anos ocorreu um incidente que resultou no fechamento permanente do local. Os registros oficiais são vagos e muitos documentos desapareceram ao longo do tempo.
+Ordem Paranormal;Nos últimos meses, porém, detectamos movimentação recente dentro do prédio. Não sabemos quem esteve lá nem o que estavam fazendo.
+Ordem Paranormal;Sua missão é explorar o hospital, recuperar qualquer documento útil e investigar a origem dessa atividade.
+Ordem Paranormal;Permaneça alerta. Há algo naquele lugar que nunca foi embora.

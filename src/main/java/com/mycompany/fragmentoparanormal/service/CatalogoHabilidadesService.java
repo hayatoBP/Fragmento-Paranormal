@@ -423,10 +423,30 @@ public class CatalogoHabilidadesService {
      */
     public static List<Habilidade> getDisponiveis(ClassePersonagem classe,
                                                    List<String> aprendidas) {
+        return getDisponiveis(classe, aprendidas, null);
+    }
+
+    /**
+     * Retorna habilidades disponíveis filtrando habilidades elementais
+     * pelo elemento do jogador (Combatente e Especialista).
+     */
+    public static List<Habilidade> getDisponiveis(ClassePersonagem classe,
+                                                   List<String> aprendidas,
+                                                   Elemento elementoJogador) {
         return TODAS.stream()
             .filter(h -> h.getClasseDona() == classe)
             .filter(h -> !aprendidas.contains(h.getNome()))
             .filter(h -> preRequisitoCumprido(h, aprendidas))
+            .filter(h -> {
+                // Para Combatente e Especialista: habilidades elementais só do próprio elemento
+                if (elementoJogador != null
+                        && h.getArvore() == TipoArvore.ELEMENTAL
+                        && h.getElementoArvore() != null
+                        && h.getElementoArvore() != elementoJogador) {
+                    return false;
+                }
+                return true;
+            })
             .collect(Collectors.toList());
     }
 

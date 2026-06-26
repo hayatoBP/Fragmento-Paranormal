@@ -11,7 +11,7 @@
         <javafx.version>21.0.2</javafx.version>
     </properties>
     <dependencies>
-        <!-- PostgreSQL JDBC Driver — conexão com pgAdmin -->
+        <!-- PostgreSQL JDBC Driver -->
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
@@ -33,13 +33,23 @@
             <artifactId>javafx-graphics</artifactId>
             <version>${javafx.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-media</artifactId>
+            <version>${javafx.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-base</artifactId>
+            <version>${javafx.version}</version>
+        </dependency>
     </dependencies>
     <build>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.11.0</version>
+                <version>3.13.0</version>
                 <configuration>
                     <release>21</release>
                 </configuration>
@@ -49,7 +59,7 @@
                 <artifactId>javafx-maven-plugin</artifactId>
                 <version>0.0.8</version>
                 <configuration>
-                    <mainClass>com.mycompany.fragmentoparanormal/com.mycompany.fragmentoparanormal.App</mainClass>
+                    <mainClass>com.mycompany.fragmentoparanormal.Main</mainClass>
                 </configuration>
                 <executions>
                     <execution>

@@ -39,6 +39,7 @@ public class Personagem {
     private ArrayList<Arma>      armas;
     private ArrayList<Artefato>  artefatosEquipados;
     private ArrayList<Habilidade> habilidades;   // Combatente / Especialista
+    private Habilidade habilidadeEquipada = null; // habilidade ativa no combate
 
     // ── Amaldiçoar Arma (Combatente) ─────────────────────────────────
     private boolean armaAmaldicoada = false;
@@ -84,25 +85,25 @@ public class Personagem {
         switch (classe) {
             case COMBATENTE:
                 vidaMaxima = 120; vida = 120;
-                forca = 25; investigacao = 10;
+                forca = 18; investigacao = 10;
                 poderParanormal = 5;
                 peMaximo = 20; pontosEsforco = 20;
                 armaEquipada = (genero == Genero.HOMEM)
-                        ? new Arma("Foice", 18) : new Arma("Faca", 12);
+                        ? new Arma("Foice", 12) : new Arma("Faca", 8);
                 desbloquearHabilidadeInicial();
                 break;
             case ESPECIALISTA:
                 vidaMaxima = 100; vida = 100;
-                forca = 15; investigacao = 25;
+                forca = 10; investigacao = 25;
                 poderParanormal = 10;
                 peMaximo = 30; pontosEsforco = 30;
-                armaEquipada = new Arma("Pistola 9mm", 14);
+                armaEquipada = new Arma("Pistola 9mm", 10);
                 desbloquearHabilidadeInicial();
                 break;
             case OCULTISTA:
                 vidaMaxima = 80; vida = 80;
                 forca = 8; investigacao = 15;
-                poderParanormal = 30;
+                poderParanormal = 20;
                 peMaximo = 50; pontosEsforco = 50;
                 armaEquipada = new Arma("Livro Paranormal", 0);
                 desbloquearRitualInicial();
@@ -130,7 +131,12 @@ public class Personagem {
         elementais.stream()
             .filter(h -> h.getTipoHabilidade() == TipoHabilidade.FRACA)
             .findFirst()
-            .ifPresent(habilidades::add);
+            .ifPresent(h -> {
+                habilidades.add(h);
+                if (habilidadeEquipada == null && !h.isHabilidadeCampo()) {
+                    habilidadeEquipada = h;
+                }
+            });
     }
 
     // ── Resetar para missão ───────────────────────────────────────────
@@ -200,8 +206,8 @@ public class Personagem {
 
     private void subirNivel() {
         nivel++;
-        // Ganha 1 ponto de atributo a cada nível (reduzido de 2 para 1 para balanceamento)
-        pontosAtributo += 1;
+        // Ganha 2 pontos de atributo a cada nível para distribuir
+        pontosAtributo += 2;
 
         // Bônus fixos de vida e PE por nível conforme especificações
         vidaMaxima += 15;
@@ -285,6 +291,10 @@ public class Personagem {
     public void aprenderHabilidade(Habilidade h) {
         if (habilidades.stream().noneMatch(x -> x.getNome().equals(h.getNome())))
             habilidades.add(h);
+        // Auto-equipa se não tiver nenhuma habilidade de combate equipada
+        if (habilidadeEquipada == null && !h.isHabilidadeCampo()) {
+            habilidadeEquipada = h;
+        }
         escolhaPendente = false;
     }
 
@@ -368,11 +378,12 @@ public class Personagem {
     public int calcularDanoFisico() {
         int dano = forca;
         if (armaEquipada != null) dano += armaEquipada.getBonusDano();
-        if (classe == ClassePersonagem.COMBATENTE) dano += 10;
+        if (classe == ClassePersonagem.COMBATENTE) dano += 5;
         return (int)(dano * bonusPreparacao);
     }
 
     public int custoAtaqueEspecial() {
+        if (habilidadeEquipada != null) return habilidadeEquipada.getCustoPE();
         return switch (classe) {
             case COMBATENTE   -> 8;
             case ESPECIALISTA -> 10;
@@ -381,7 +392,20 @@ public class Personagem {
     }
 
     public int calcularDanoEspecial() {
-        return (int)(calcularDanoFisico() * 1.75);
+        double mult = 1.75;
+        Elemento elemHab = null;
+        if (habilidadeEquipada != null) {
+            mult = habilidadeEquipada.getMultiplicadorDano() > 0
+                 ? habilidadeEquipada.getMultiplicadorDano() : 1.75;
+            elemHab = habilidadeEquipada.getElementoArvore();
+        }
+        double danoBase = calcularDanoFisico() * mult;
+        // Bônus de afinidade elemental se habilidade for do próprio elemento
+        if (elemHab != null && elemHab == elemento) {
+            danoBase *= getBonusAfinidade(elemHab);
+        }
+        // Bônus de redução de PE por afinidade aplicado em custoAtaqueEspecial
+        return (int) danoBase;
     }
 
     public int calcularDanoRitual() {
@@ -486,6 +510,11 @@ public class Personagem {
     public ArrayList<Ritual> getRituais()            { return rituais; }
     public ArrayList<Arma> getArmas()                { return armas; }
     public ArrayList<Habilidade> getHabilidades()    { return habilidades; }
+    public Habilidade getHabilidadeEquipada()        { return habilidadeEquipada; }
+    public void setHabilidadeEquipada(Habilidade h) {
+        this.habilidadeEquipada = h;
+        // Auto-equipa a primeira habilidade ao aprender se não tiver nenhuma
+    }
     public boolean isEscolhaPendente()               { return escolhaPendente; }
     public void setEscolhaPendente(boolean v)        { this.escolhaPendente = v; }
 
@@ -494,31 +523,21 @@ public class Personagem {
     public void setScene(String scene) { this.scene = scene; }
 
     public String getImagemAtual() {
-        if (armaEquipada == null) return imagemBase;
+        String base = armaEquipada == null ? getNomePersonagemBase() : getNomePersonagemBase() + "_arma";
+        return "/com/mycompany/fragmentoparanormal/images/personagens/" + base;
+    }
+
+    /** Retorna o nome base do personagem (ex: "arthur", "erin") para buscar imagens de diálogo */
+    public String getNomePersonagemBase() {
         return switch (classe) {
-            case ESPECIALISTA -> genero == Genero.HOMEM
-                ? "/com/mycompany/fragmentoparanormal/images/personagens/arthur_arma.png"
-                : "/com/mycompany/fragmentoparanormal/images/personagens/erin_arma.png";
-            case COMBATENTE   -> genero == Genero.HOMEM
-                ? "/com/mycompany/fragmentoparanormal/images/personagens/dominic_arma.png"
-                : "/com/mycompany/fragmentoparanormal/images/personagens/carina_arma.png";
-            case OCULTISTA    -> genero == Genero.HOMEM
-                ? "/com/mycompany/fragmentoparanormal/images/personagens/dante_arma.png"
-                : "/com/mycompany/fragmentoparanormal/images/personagens/agatha_arma.png";
+            case ESPECIALISTA -> genero == Genero.HOMEM ? "arthur" : "erin";
+            case COMBATENTE   -> genero == Genero.HOMEM ? "dominic" : "carina";
+            case OCULTISTA    -> genero == Genero.HOMEM ? "dante" : "agatha";
         };
     }
 
     private void definirImagemBase() {
-        imagemBase = switch (classe) {
-            case ESPECIALISTA -> genero == Genero.HOMEM
-                ? "/com/mycompany/fragmentoparanormal/images/personagens/arthur.png"
-                : "/com/mycompany/fragmentoparanormal/images/personagens/erin.png";
-            case COMBATENTE   -> genero == Genero.HOMEM
-                ? "/com/mycompany/fragmentoparanormal/images/personagens/dominic.png"
-                : "/com/mycompany/fragmentoparanormal/images/personagens/carina.png";
-            case OCULTISTA    -> genero == Genero.HOMEM
-                ? "/com/mycompany/fragmentoparanormal/images/personagens/dante.png"
-                : "/com/mycompany/fragmentoparanormal/images/personagens/agatha.png";
-        };
+        String nome = getNomePersonagemBase();
+        imagemBase = "/com/mycompany/fragmentoparanormal/images/personagens/" + nome;
     }
 }

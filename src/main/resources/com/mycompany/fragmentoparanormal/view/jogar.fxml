@@ -4,16 +4,22 @@
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox alignment="CENTER" spacing="20"
+<VBox alignment="CENTER" spacing="30"
       xmlns="http://javafx.com/javafx/21"
       xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="com.mycompany.fragmentoparanormal.controller.JogarController">
+      fx:controller="com.mycompany.fragmentoparanormal.controller.JogarController"
+      style="-fx-background-color: #000; -fx-padding: 50;">
 
-    <Label text="Jogar"
-           style="-fx-font-size: 28px; -fx-font-weight: bold;" />
+    <Label text="JOGAR"
+           style="-fx-font-size: 42px; -fx-font-weight: bold; -fx-text-fill: #c0392b; -fx-letter-spacing: 5;" />
 
-    <Button text="Jogar com jogador existente" prefWidth="250" onAction="#abrirJogadorExistente"/>
-    <Button text="Jogar com novo jogador" prefWidth="250" onAction="#abrirNovoJogador"/>
-    <Button text="Voltar" prefWidth="250" onAction="#voltar"/>
+    <VBox alignment="CENTER" spacing="15">
+        <Button text="🎮  Jogador Existente" prefWidth="280" prefHeight="50" onAction="#abrirJogadorExistente"
+                style="-fx-font-size: 16px;"/>
+        <Button text="➕  Novo Jogador" prefWidth="280" prefHeight="50" onAction="#abrirNovoJogador"
+                style="-fx-font-size: 16px;"/>
+        <Button text="🔙  Voltar" prefWidth="280" prefHeight="50" onAction="#voltar"
+                style="-fx-font-size: 16px; -fx-background-color: #444;"/>
+    </VBox>
 
 </VBox>

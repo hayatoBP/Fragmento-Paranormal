@@ -8,6 +8,8 @@ import com.mycompany.fragmentoparanormal.model.Ritual;
 import com.mycompany.fragmentoparanormal.service.ElementoService;
 import com.mycompany.fragmentoparanormal.util.Elemento;
 import com.mycompany.fragmentoparanormal.util.GameState;
+import com.mycompany.fragmentoparanormal.util.MusicaManager;
+import com.mycompany.fragmentoparanormal.util.SomUtil;
 import com.mycompany.fragmentoparanormal.util.TelaUtil;
 import com.mycompany.fragmentoparanormal.util.TipoItem;
 import javafx.event.ActionEvent;
@@ -44,6 +46,7 @@ public class InventarioController {
 
     @FXML
     public void initialize() {
+        MusicaManager.tocarResto();
         jogador = GameContext.jogadorAtual;
         listaArmas.setCellFactory(lv -> celulaArma());
         listaRituais.setCellFactory(lv -> celulaRitual());
@@ -84,20 +87,10 @@ public class InventarioController {
     private void carregarHabilidades() {
         listaHabilidades.getItems().clear();
         if (jogador == null) return;
-        switch (jogador.getClasse()) {
-            case COMBATENTE -> {
-                listaHabilidades.getItems().add("Golpe Brutal — Dano físico ×1.75  (8 PE)");
-                listaHabilidades.getItems().add("Resistência — Reduz próximo dano em 30%  (5 PE)");
-            }
-            case ESPECIALISTA -> {
-                listaHabilidades.getItems().add("Tiro Preciso — Ignora defesa do inimigo  (10 PE)");
-                listaHabilidades.getItems().add("Análise Rápida — Revela fraqueza elemental  (6 PE)");
-            }
-            case OCULTISTA -> {
-                listaHabilidades.getItems().add("Absorção Paranormal — Recupera 15 PE ao matar  (passivo)");
-                listaHabilidades.getItems().add("Escudo Arcano — Absorve 20 de dano  (12 PE)");
-            }
-        }
+        // Mostra apenas habilidades de combate (não de campo)
+        jogador.getHabilidades().stream()
+            .filter(h -> !h.isHabilidadeCampo())
+            .forEach(h -> listaHabilidades.getItems().add(h.getNome() + " — " + h.getEfeito() + "  (" + h.getCustoPE() + " PE)"));
     }
 
     // ── CÉLULAS ─────────────────────────────────────────────────────
@@ -255,7 +248,16 @@ public class InventarioController {
                 if (empty || item == null) { setText(null); setStyle("-fx-background-color: transparent;"); return; }
                 setText(item.getNome());
                 setStyle("-fx-text-fill: #a569bd; -fx-background-color: transparent; -fx-font-size: 12px;");
-                tip.setText(item.getNome() + "\n─────────────────\n" + item.getDescricao());
+                // Build tooltip with effect value
+                String efeitoDesc = switch (item.getTipo()) {
+                    case CURA           -> "❤ Restaura " + item.getEfeito() + " pontos de vida";
+                    case RESTAURAR_PE   -> "⚡ Restaura " + item.getEfeito() + " PE";
+                    case BOOST_FORCA    -> "⚔ +"+item.getEfeito()+" Força permanentemente";
+                    case BOOST_PARANORMAL -> "☽ +"+item.getEfeito()+" Poder Paranormal permanentemente";
+                    case BOOST_VIDA_MAX -> "❤ +"+item.getEfeito()+" Vida Máxima permanentemente";
+                    default             -> item.getDescricao();
+                };
+                tip.setText(item.getNome() + "\n─────────────────\n" + item.getDescricao() + "\n\n" + efeitoDesc);
             }
         };
     }
@@ -264,6 +266,7 @@ public class InventarioController {
 
     @FXML
     private void equiparArma() {
+        SomUtil.tocarConfirmar();
         Arma arma = listaArmas.getSelectionModel().getSelectedItem();
         if (arma == null) { feedback("Selecione uma arma para equipar."); return; }
         
@@ -279,7 +282,24 @@ public class InventarioController {
     }
 
     @FXML
+    private void equiparHabilidade() {
+        String sel = listaHabilidades.getSelectionModel().getSelectedItem();
+        if (sel == null) { feedback("Selecione uma habilidade para equipar."); return; }
+        // Find matching Habilidade by name prefix
+        String nomeSelecionado = sel.split(" — ")[0];
+        jogador.getHabilidades().stream()
+            .filter(h -> !h.isHabilidadeCampo() && h.getNome().equals(nomeSelecionado))
+            .findFirst()
+            .ifPresent(h -> {
+                jogador.setHabilidadeEquipada(h);
+                atualizarInfoPersonagem();
+                feedback("✦ " + h.getNome() + " equipada como habilidade ativa!");
+            });
+    }
+
+    @FXML
     private void equiparRitual() {
+        SomUtil.tocarConfirmar();
         Ritual ritual = listaRituais.getSelectionModel().getSelectedItem();
         if (ritual == null) { feedback("Selecione um ritual para equipar."); return; }
         jogador.setRitualEquipado(ritual);
@@ -308,6 +328,7 @@ public class InventarioController {
 
     @FXML
     private void usarItem() {
+        SomUtil.tocarConfirmar();
         Item item = listaItens.getSelectionModel().getSelectedItem();
         if (item == null || !item.temEfeito()) { feedback("Selecione um item para usar."); return; }
         String resultado = aplicarEfeito(item);
@@ -324,6 +345,7 @@ public class InventarioController {
 
     @FXML
     private void voltar(ActionEvent event) {
+        SomUtil.tocarVoltar();
         String origem = GameState.getOrigemInventario();
         if ("COMBATE".equals(origem)) {
             TelaUtil.trocarTela(event, "/com/mycompany/fragmentoparanormal/view/combate.fxml");
@@ -334,11 +356,20 @@ public class InventarioController {
 
     // ── FICHA DO PERSONAGEM ──────────────────────────────────────────
 
+    private Image carregarImagem(String basePath) {
+        for (String ext : new String[]{".png", ".webp", ".jpg"}) {
+            String path = basePath.replaceAll("\\.(png|webp|jpg|gif)$", "") + ext;
+            var s = getClass().getResourceAsStream(path);
+            if (s != null) return new Image(s);
+        }
+        return null;
+    }
+
     private void atualizarInfoPersonagem() {
         if (jogador == null) return;
         try {
-            var s = getClass().getResourceAsStream(jogador.getImagemAtual());
-            if (s != null) imgPersonagem.setImage(new Image(s));
+            Image img = carregarImagem(jogador.getImagemAtual());
+            if (img != null) imgPersonagem.setImage(img);
         } catch (Exception ignored) {}
 
         lblNome.setText(jogador.getNome());
@@ -357,10 +388,11 @@ public class InventarioController {
                 "  [" + arma.rotuloclassificacao() + "]  dano: " + dano);
         }
 
-        switch (jogador.getClasse()) {
-            case COMBATENTE   -> lblHabilidadeEquipada.setText("✦  Golpe Brutal  (8 PE)");
-            case ESPECIALISTA -> lblHabilidadeEquipada.setText("✦  Tiro Preciso  (10 PE)");
-            case OCULTISTA    -> lblHabilidadeEquipada.setText("✦  Absorção Paranormal  (passivo)");
+        var hab = jogador.getHabilidadeEquipada();
+        if (hab == null) {
+            lblHabilidadeEquipada.setText("✦  Habilidade: nenhuma equipada");
+        } else {
+            lblHabilidadeEquipada.setText("✦  " + hab.getNome() + "  (" + hab.getCustoPE() + " PE)");
         }
 
         lblRitualEquipado.setText(jogador.getRitualEquipado() == null

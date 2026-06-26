@@ -39,6 +39,7 @@ public class DatabaseInit {
                     pontos_esforco      INT           NOT NULL,
                     pe_maximo           INT           NOT NULL,
                     pontos_atributo     INT           NOT NULL DEFAULT 0,
+                    dinheiro            INT           NOT NULL DEFAULT 0,
                     arma_equipada       VARCHAR(100),
                     arma_bonus_dano     INT           DEFAULT 0,
                     criado_em           TIMESTAMP     NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -98,6 +99,14 @@ public class DatabaseInit {
                     "ALTER TABLE itens_jogador ADD COLUMN IF NOT EXISTS bonus_dano INT NOT NULL DEFAULT 0");
             } catch (Exception ex) {
                 System.err.println("[DB] Migração itens_jogador: " + ex.getMessage());
+            }
+
+            // Migração: adicionar coluna dinheiro em jogadores se não existir
+            try {
+                conn.createStatement().execute(
+                    "ALTER TABLE jogadores ADD COLUMN IF NOT EXISTS dinheiro INT NOT NULL DEFAULT 0");
+            } catch (Exception ex) {
+                System.err.println("[DB] Migração jogadores.dinheiro: " + ex.getMessage());
             }
 
             System.out.println("[DB] Schema inicializado com sucesso.");

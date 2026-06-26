@@ -2,6 +2,8 @@ package com.mycompany.fragmentoparanormal.controller;
 
 import com.mycompany.fragmentoparanormal.util.GameState;
 import com.mycompany.fragmentoparanormal.util.GameState.PaginaDiario;
+import com.mycompany.fragmentoparanormal.util.MusicaManager;
+import com.mycompany.fragmentoparanormal.util.SomUtil;
 import com.mycompany.fragmentoparanormal.util.TelaUtil;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -18,6 +20,7 @@ public class DiarioController {
 
     @FXML
     public void initialize() {
+        MusicaManager.tocarResto();
         List<PaginaDiario> paginas = GameState.getPaginasEncontradas();
         listaPaginas.getItems().setAll(paginas);
 
@@ -29,7 +32,7 @@ public class DiarioController {
                 super.updateItem(p, empty);
                 if (empty || p == null) { setText(null); setStyle("-fx-background-color: transparent;"); return; }
                 setText(p.titulo());
-                setStyle("-fx-text-fill: #e0d0ff; -fx-font-size: 12px; -fx-background-color: transparent;");
+                setStyle("-fx-text-fill: #f0d0d0; -fx-font-size: 12px; -fx-background-color: transparent;");
             }
         });
 
@@ -49,6 +52,7 @@ public class DiarioController {
 
     @FXML
     private void voltar(ActionEvent event) {
+        SomUtil.tocarVoltar();
         String origem = GameState.getOrigemInventario();
         if ("MISSAO".equals(origem)) {
             TelaUtil.trocarTela(event, "/com/mycompany/fragmentoparanormal/view/missao.fxml");

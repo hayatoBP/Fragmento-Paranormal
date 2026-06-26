@@ -3,6 +3,8 @@ package com.mycompany.fragmentoparanormal.controller;
 import com.mycompany.fragmentoparanormal.dao.JogadorDAO;
 import com.mycompany.fragmentoparanormal.model.Personagem;
 import com.mycompany.fragmentoparanormal.util.GameState;
+import com.mycompany.fragmentoparanormal.util.MusicaManager;
+import com.mycompany.fragmentoparanormal.util.SomUtil;
 import com.mycompany.fragmentoparanormal.util.TelaUtil;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -25,8 +27,9 @@ public class JogadorExistenteController {
     @FXML private TableColumn<Personagem, String> colArma;
     @FXML private Label lblAviso;
 
-    @FXML
+        @FXML
     public void initialize() {
+        MusicaManager.tocarMenuInicial();
         // Configura as colunas
         colNome    .setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getNome()));
         colClasse  .setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getClasse().toString()));
@@ -58,6 +61,7 @@ public class JogadorExistenteController {
 
     @FXML
     private void confirmar(ActionEvent event) {
+        SomUtil.tocarConfirmar();
         Personagem selecionado = tabelaJogadores.getSelectionModel().getSelectedItem();
         if (selecionado == null) {
             if (lblAviso != null) lblAviso.setText("Selecione um jogador na tabela.");
@@ -69,11 +73,15 @@ public class JogadorExistenteController {
 
         GameContext.jogadorAtual = carregado;
         GameState.setMissaoEmAndamento(false);
+        // Reseta lista de missões e carrega progresso salvo do banco
+        com.mycompany.fragmentoparanormal.service.MissaoService.resetarSessao();
+        com.mycompany.fragmentoparanormal.service.MissaoService.aplicarProgressoSalvo(carregado.getId());
         TelaUtil.trocarTela(event, "/com/mycompany/fragmentoparanormal/view/chamado.fxml");
     }
 
     @FXML
     private void voltar(ActionEvent event) {
+        SomUtil.tocarVoltar();
         TelaUtil.trocarTela(event, "/com/mycompany/fragmentoparanormal/view/jogar.fxml");
     }
 }

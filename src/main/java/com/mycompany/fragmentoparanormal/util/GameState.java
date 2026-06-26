@@ -15,9 +15,10 @@ public class GameState {
     // Controla se o boss de cada missão (0–3) já foi derrotado nesta sessão
     private static final int   TOTAL_MISSOES     = 4;
     private static final boolean[] bossMissaoDerrotado = new boolean[TOTAL_MISSOES];
-    private static boolean investigouNesteAvanco = false;
-    private static boolean missaoEmAndamento = false;
-    private static String  origemInventario  = "MISSAO";
+    private static boolean investigouNesteAvanco     = false;
+    private static boolean combateVencidoNesteLocal  = false;
+    private static boolean missaoEmAndamento          = false;
+    private static String  origemInventario           = "MISSAO";
 
 
 
@@ -27,43 +28,202 @@ public class GameState {
 
     // ── Textos completos das 28 páginas (4 missões × 7) ──────────────
     private static final String[][] TEXTOS = {
-        { // 0 — Sangue
-            "\"O hospital estava vazio quando cheguei. Mas as marcas nas paredes contavam outra história — alguém sangrou aqui por horas antes de desaparecer.\"\n— Diário, Página 1 [Sangue]",
-            "\"Encontrei um prontuário médico rasgado. O paciente respondia por 'Sujeito Alfa'. Último registro: 'estado irreversível'. Nenhuma data.\"\n— Diário, Página 2 [Sangue]",
-            "\"As criaturas daqui se alimentam de memória — não de carne. Cada ferida que causam apaga um fragmento de quem você é.\"\n— Diário, Página 3 [Sangue]",
-            "\"Lívia disse que a medicina e o paranormal não eram diferentes. Ambos tentavam consertar o que não deveria estar quebrado. Ela estava certa — da pior forma.\"\n— Diário, Página 4 [Sangue]",
-            "\"O elemento Sangue não representa violência. Representa vínculo. Quem o invoca se conecta a tudo que já viveu — e a tudo que perdeu.\"\n— Diário, Página 5 [Sangue]",
-            "\"Vi meu próprio reflexo numa poça de sangue seco. Ele piscou antes de mim.\"\n— Diário, Página 6 [Sangue]",
-            "\"Saí do hospital com mais dúvidas do que respostas. Mas levei algo comigo que não estava lá quando entrei. Algo que ainda não consigo nomear.\"\n— Diário, Página 7 [Sangue]"
+        { // 0 — Sangue (Hospital Santa Agnes)
+            """
+PRONTUÁRIO MÉDICO 14-B
+
+DOCUMENTO ANTIGO
+Paciente apresenta comportamento agressivo incomum. Os sedativos não produzem efeito. Durante a madrugada tentou atacar dois enfermeiros e afirmou ouvir \"algo respirando dentro das paredes\". Solicito transferência imediata para observação especializada.
+
+ANOTAÇÃO RECENTE
+Os primeiros registros confirmam o aumento da influência paranormal. O local é mais promissor do que imaginávamos.""",
+            """
+REGISTRO DE OCORRÊNCIA
+
+DOCUMENTO ANTIGO
+Diversos pacientes relataram ouvir gritos vindos da ala cirúrgica desativada. A equipe realizou uma busca completa. Nenhuma pessoa foi encontrada. Os gritos continuaram durante toda a madrugada.
+
+ANOTAÇÃO RECENTE
+A concentração permanece estável mesmo após todos esses anos. Não será necessário buscar outra instalação.""",
+            """
+RELATÓRIO INTERNO
+
+DOCUMENTO ANTIGO
+O paciente da Sala 09 sofreu alterações físicas severas. Sua força aumentou drasticamente. Dois seguranças ficaram feridos tentando contê-lo. O diretor proibiu que o caso fosse divulgado.
+
+ANOTAÇÃO RECENTE
+As transformações observadas coincidem com os resultados esperados. Precisamos de mais amostras.""",
+            """
+FOLHA RASGADA
+
+DOCUMENTO ANTIGO
+...não importa quantas portas sejam trancadas. Continua aparecendo em lugares diferentes. Não sei mais se estamos lidando com um paciente.
+
+ANOTAÇÃO RECENTE
+O espécime original ainda parece influenciar o ambiente. Interessante.""",
+            """
+MEMORANDO DE EMERGÊNCIA
+
+DOCUMENTO ANTIGO
+Todas as atividades médicas foram suspensas. Os funcionários devem abandonar o prédio imediatamente. A situação está fora de controle.
+
+ANOTAÇÃO RECENTE
+O incidente explica o estado atual do hospital. Felizmente isso não interfere na pesquisa.""",
+            """
+RELATÓRIO DE PESQUISA
+
+DOCUMENTO ANTIGO
+[DOCUMENTO DANIFICADO]
+Grande parte do texto foi destruída.
+
+ANOTAÇÃO RECENTE
+Primeira fase concluída. Os resultados superaram as expectativas. O potencial deste local é extraordinário. Talvez tenhamos encontrado o ambiente ideal.""",
+            """
+ANOTAÇÃO FINAL
+
+DOCUMENTO ANTIGO
+Se alguém encontrar isto...
+Não volte para este hospital.
+Não importa o que esteja procurando.
+Não entre na ala subterrânea.
+
+ANOTAÇÃO RECENTE
+O confinamento falhou. Perdemos contato com a equipe enviada ao subsolo. O experimento tornou-se imprevisível. Estamos abandonando a instalação."""
         },
-        { // 1 — Morte
-            "\"O cemitério tem lápides sem nome. Centenas delas. Alguém as colocou aqui deliberadamente — para honrar os que não podiam ser lembrados.\"\n— Diário, Página 1 [Morte]",
-            "\"Corvin era coveiro antes de se tornar agente. Dizia que a morte não era um fim — era uma mudança de endereço. Sinto falta do cinismo dele.\"\n— Diário, Página 2 [Morte]",
-            "\"As criaturas aqui não atacam por instinto. Elas esperam. Observam. Escolhem o momento em que você baixa a guarda.\"\n— Diário, Página 3 [Morte]",
-            "\"Encontrei flores frescas sobre uma das lápides sem nome. Alguém ainda vem aqui. Alguém ainda lembra.\"\n— Diário, Página 4 [Morte]",
-            "\"O elemento Morte não destrói. Ele preserva o que foi, exatamente como era no último momento.\"\n— Diário, Página 5 [Morte]",
-            "\"Ouvi passos no necrotério. Eram meus próprios — ecoando de dez minutos atrás.\"\n— Diário, Página 6 [Morte]",
-            "\"Deixei o cemitério ao amanhecer. As lápides sem nome tinham nomes agora. Todos iguais. Todos o meu.\"\n— Diário, Página 7 [Morte]"
+        { // 1 — Morte (Cemitério Esquecido)
+            """
+BOLETIM DE OCORRÊNCIA Nº 214/2016
+
+DOCUMENTO ANTIGO
+Data: 14 de setembro de 2016. Às 06h42, três adolescentes foram encontrados sem vida próximos ao antigo mausoléu da família Alencar. Não foram observados sinais de violência compatíveis com homicídio convencional. Apesar de possuírem entre 16 e 17 anos, apresentavam características semelhantes às de pessoas muito idosas. A pele estava profundamente enrugada, os cabelos completamente brancos e os tecidos musculares extremamente deteriorados.
+
+ANOTAÇÃO ESCRITA À MÃO
+Os registros oficiais foram mais úteis do que esperávamos. O evento deixou marcas permanentes. Ainda conseguimos sentir a mesma presença.""",
+            """
+DIÁRIO DO COVEIRO
+
+DOCUMENTO ANTIGO
+Faz quatro noites que escuto passos entre os túmulos depois que todos vão embora. Não vejo ninguém. Só escuto. Hoje encontrei flores recém-colocadas em um jazigo abandonado há décadas. Não havia pegadas na terra. Acho que vou pedir demissão.
+
+ANOTAÇÃO RECENTE
+Funcionários comuns sempre percebem os sintomas primeiro. A exposição prolongada aumenta significativamente a sensibilidade.""",
+            """
+RELATÓRIO DE CAMPO
+
+DOCUMENTO RECENTE
+A segunda instalação foi montada sem incidentes. A quantidade de energia residual supera nossas estimativas iniciais. Diferentemente do hospital, aqui o fenômeno permanece estável. Talvez finalmente tenhamos encontrado um ambiente adequado para os próximos testes.""",
+            """
+DOCUMENTO PARCIAL
+
+DOCUMENTO RECENTE
+Os resultados obtidos na Instalação Um foram suficientes para validar a hipótese. Cada manifestação possui propriedades próprias. Separadamente são interessantes. Em conjunto... ainda não temos dados suficientes.""",
+            """
+MEMORANDO INTERNO
+
+DOCUMENTO RECENTE
+Ordem do Conselho: Nenhum membro da equipe deve discutir o verdadeiro objetivo do projeto fora das reuniões autorizadas. Ainda existem pesquisadores que questionam nossos métodos. Quando os resultados aparecerem, entenderão que todos os sacrifícios foram necessários.""",
+            """
+PÁGINA RASURADA
+
+DOCUMENTO RECENTE
+A equipe insiste em chamar os espécimes de \"monstros\". Discordo. Não estamos criando monstros. Estamos observando a evolução natural do paranormal.""",
+            """
+ÚLTIMO REGISTRO
+
+DOCUMENTO RECENTE
+O experimento voltou a apresentar comportamento imprevisível. Perdemos quatro pesquisadores nas últimas quarenta e oito horas. Encerramos as atividades nesta instalação. A próxima fase já está preparada."""
         },
-        { // 2 — Energia
-            "\"O laboratório ainda tem eletricidade — mas nenhuma fonte de energia conhecida está conectada.\"\n— Diário, Página 1 [Energia]",
-            "\"Mara acreditava que o paranormal era física mal compreendida. Seus experimentos a consumiram.\"\n— Diário, Página 2 [Energia]",
-            "\"As distorções aqui dobram o tempo localmente. Entrei às 14h. A vela já está completamente consumida.\"\n— Diário, Página 3 [Energia]",
-            "\"Os inimigos de energia não causam dano físico. Eles drenam — PE, força de vontade, certeza.\"\n— Diário, Página 4 [Energia]",
-            "\"Encontrei as anotações de Mara. A última termina no meio de uma frase.\"\n— Diário, Página 5 [Energia]",
-            "\"As luzes piscaram em código Morse. Traduzi: 'VOCÊ JÁ ESTEVE AQUI ANTES'.\"\n— Diário, Página 6 [Energia]",
-            "\"Saí do laboratório carregando uma carga estática que não dissipa. Toda tela que toco mostra o rosto de Mara.\"\n— Diário, Página 7 [Energia]"
+        { // 2 — Energia (Parque de Diversões)
+            """
+RELATÓRIO DOS BOMBEIROS
+
+DOCUMENTO ANTIGO
+O incêndio começou às 19h17 após uma explosão na central elétrica. Diversas testemunhas afirmam que os brinquedos permaneceram funcionando mesmo sem fornecimento de energia. Algumas equipes se recusaram a retornar ao parque após o combate ao incêndio.
+
+ANOTAÇÃO RECENTE
+Excelente. O caos permanece impregnado no ambiente.""",
+            """
+BILHETE ENCONTRADO
+
+DOCUMENTO ANTIGO
+Pai,
+Se você encontrar este papel... Estou escondido dentro da casa dos espelhos. As luzes não param de piscar. Tem alguém me chamando pelo meu nome.
+
+ANOTAÇÃO RECENTE
+Casos como este ajudam a compreender os efeitos da exposição prolongada.""",
+            """
+RELATÓRIO TÉCNICO
+
+DOCUMENTO RECENTE
+Instalação Três operacional. A energia produz comportamento completamente diferente das pesquisas anteriores. O ambiente muda constantemente. Instrumentos apresentam leituras impossíveis.""",
+            """
+MEMORANDO
+
+DOCUMENTO RECENTE
+O Projeto Gênese entrou oficialmente na Fase II. A coleta de dados segue conforme o cronograma. Em breve teremos material suficiente para iniciar a integração.""",
+            """
+DIÁRIO DE PESQUISA
+
+DOCUMENTO RECENTE
+Quanto mais estudamos o Outro Lado... Mais evidente se torna que ele não é caótico. Existe um padrão. Ainda não conseguimos enxergá-lo por completo.""",
+            """
+RELATÓRIO RESTRITO
+
+DOCUMENTO RECENTE
+Algumas equipes questionam por que escolhemos locais abandonados. A resposta é simples. Lugares onde ocorreram tragédias preservam melhor a influência paranormal.""",
+            """
+ORDEM DE TRANSFERÊNCIA
+
+DOCUMENTO RECENTE
+Encerrar imediatamente todas as pesquisas nesta instalação. Preparar transporte do espécime. O Conselho autorizou a próxima etapa."""
         },
-        { // 3 — Conhecimento
-            "\"A biblioteca parece normal à primeira vista. Mas todos os livros têm o mesmo número de páginas. Exatamente 312. Todos.\"\n— Diário, Página 1 [Conhecimento]",
-            "\"Os cultos que operaram aqui adoravam informação. Acreditavam que saber o suficiente tornava qualquer coisa possível.\"\n— Diário, Página 2 [Conhecimento]",
-            "\"Encontrei documentos proibidos selados com cera negra. O símbolo era o mesmo dos quatro círculos conectados.\"\n— Diário, Página 3 [Conhecimento]",
-            "\"O elemento Conhecimento não dá poder diretamente. Ele mostra onde o poder já existe — e como tomá-lo.\"\n— Diário, Página 4 [Conhecimento]",
-            "\"Li o suficiente para entender o que o autor do diário estava tentando fazer.\"\n— Diário, Página 5 [Conhecimento]",
-            "\"A última seção da biblioteca está trancada por dentro. Empurrei a porta. Ela abriu. Não havia ninguém.\"\n— Diário, Página 6 [Conhecimento]",
-            "\"Encontrei o espelho. Vi o rosto do autor. Era alguém da Ordem — alguém que me enviou para cá.\n\nEle sabia. Ele sempre soube.\"\n— Diário, Página 7 [Conhecimento] ⚠ ÚLTIMA PÁGINA"
+        { // 3 — Conhecimento (Mansão)
+            """
+DIÁRIO DE UM PESQUISADOR
+
+DOCUMENTO ANTIGO
+Passamos anos estudando o paranormal. No início queríamos respostas. Agora só queremos continuar perguntando. Às vezes penso que a mansão responde antes mesmo de terminarmos as perguntas.
+
+ANOTAÇÃO RECENTE
+Os antigos proprietários compreenderam parte da verdade. Infelizmente enlouqueceram antes de chegar ao fim.""",
+            """
+REGISTRO DA SOCIEDADE
+
+DOCUMENTO ANTIGO
+Conhecimento não possui limite. O limite pertence apenas à mente humana.
+
+ANOTAÇÃO RECENTE
+Talvez eles estivessem certos.""",
+            """
+RELATÓRIO DE PESQUISA
+
+DOCUMENTO RECENTE
+Sangue. Morte. Energia. Todos apresentaram resultados superiores às previsões iniciais. Resta concluir a quarta etapa.""",
+            """
+DOCUMENTO CONFIDENCIAL
+
+DOCUMENTO RECENTE
+Pela primeira vez conseguimos observar interação entre os quatro conjuntos de dados. A hipótese principal permanece válida.""",
+            """
+ATA DE REUNIÃO
+
+DOCUMENTO RECENTE
+O Conselho aprovou por unanimidade a continuidade do Projeto Gênese. Não existem mais dúvidas. Estamos próximos de provar nossa teoria.""",
+            """
+REGISTRO PESSOAL
+
+DOCUMENTO RECENTE
+Alguns pesquisadores acreditam que estamos indo longe demais. Discordo. Toda descoberta importante exigiu coragem. A história lembrará nossos nomes.""",
+            """
+ÚLTIMA PÁGINA
+
+DOCUMENTO RECENTE
+Todos os componentes foram obtidos. O protótipo está pronto para ser transferido. Se nossos cálculos estiverem corretos...
+
+O próximo registro desta pesquisa marcará o início de uma nova era para a humanidade."""
         }
     };
+
 
     // ── Páginas do diário ─────────────────────────────────────────────
     public static void registrarPagina(int missaoIdx, int numeroPagina) {
@@ -98,12 +258,14 @@ public class GameState {
     public static void    setVeioDeDerrota(boolean v)      { veioDeDerrota = v; }
     public static boolean isBossDesbloqueado()             { return bossDesbloqueado; }
     public static void    setBossDesbloqueado(boolean v)   { bossDesbloqueado = v; }
-    public static boolean isInvestigouNesteAvanco()        { return investigouNesteAvanco; }
+    public static boolean isInvestigouNesteAvanco()         { return investigouNesteAvanco; }
     public static void    setInvestigouNesteAvanco(boolean v){ investigouNesteAvanco = v; }
-    public static boolean isMissaoEmAndamento()            { return missaoEmAndamento; }
-    public static void    setMissaoEmAndamento(boolean v)  { missaoEmAndamento = v; }
-    public static String  getOrigemInventario()            { return origemInventario; }
-    public static void    setOrigemInventario(String o)    { origemInventario = o; }
+    public static boolean isCombateVencidoNesteLocal()      { return combateVencidoNesteLocal; }
+    public static void    setCombateVencidoNesteLocal(boolean v){ combateVencidoNesteLocal = v; }
+    public static boolean isMissaoEmAndamento()             { return missaoEmAndamento; }
+    public static void    setMissaoEmAndamento(boolean v)   { missaoEmAndamento = v; }
+    public static String  getOrigemInventario()             { return origemInventario; }
+    public static void    setOrigemInventario(String o)     { origemInventario = o; }
 
 
 
@@ -113,17 +275,18 @@ public class GameState {
      */
     public static void perderPaginasParcial(boolean contraBoss) {
         if (missaoAtual == null) return;
-            int idx = missaoAtual.getOrdem() - 1;
-            if (idx >= 0 && idx < TOTAL_MISSOES) {
-                int totalAtual = (int) missaoAtual.getLocais().stream().filter(l -> l.isPaginaEncontrada()).count();
+        // getOrdem() retorna 0-3 diretamente (índice correto)
+        int idx = missaoAtual.getOrdem();
+        if (idx >= 0 && idx < TOTAL_MISSOES) {
+            int totalAtual = (int) missaoAtual.getLocais().stream()
+                    .filter(l -> l.isPaginaEncontrada()).count();
             int novasPaginas;
 
             if (contraBoss) {
-                // Se morreu pro boss, volta com 4 páginas
-                novasPaginas = 4;
+                // Morreu pro boss → volta com até 4 páginas
+                novasPaginas = Math.min(4, totalAtual);
             } else {
-                // Se morreu/fugiu comum, perde metade (arredondado pra cima na perda)
-                // Ex: 1->0, 2->1, 3->1, 4->2, 5->2, 6->3, 7->3
+                // Morreu/fugiu comum → perde metade
                 novasPaginas = totalAtual / 2;
             }
 
@@ -132,12 +295,19 @@ public class GameState {
             for (int i = 0; i < missaoAtual.getLocais().size(); i++) {
                 missaoAtual.getLocais().get(i).setPaginaEncontrada(false);
             }
-            for (int i = 0; i < novasPaginas; i++) {
+            for (int i = 0; i < novasPaginas && i < missaoAtual.getLocais().size(); i++) {
                 missaoAtual.getLocais().get(i).setPaginaEncontrada(true);
-                registrarPagina(missaoAtual.getOrdem() - 1, i + 1); // +1 para ordem e número da página
+                registrarPagina(idx, i + 1);
             }
+
+            // Volta o localAtual para onde tem progresso
+            missaoAtual.setLocalAtual(Math.min(novasPaginas, missaoAtual.getLocais().size() - 1));
         }
-        
+
+        // Reseta estado de combate
+        combateVencidoNesteLocal = false;
+        investigouNesteAvanco    = false;
+
         // Recupera vida/PE ao voltar ao QG
         if (com.mycompany.fragmentoparanormal.controller.GameContext.jogadorAtual != null) {
             com.mycompany.fragmentoparanormal.controller.GameContext.jogadorAtual.resetarParaMissao();
@@ -147,8 +317,8 @@ public class GameState {
     public static void resetar() {
         missaoAtual = null; veioDeFuga = false; veioDeDerrota = false;
         bossDesbloqueado = false; investigouNesteAvanco = false;
+        combateVencidoNesteLocal = false;
         missaoEmAndamento = false; origemInventario = "MISSAO";
-
         Arrays.fill(bossMissaoDerrotado, false);
         paginasEncontradas.clear();
     }

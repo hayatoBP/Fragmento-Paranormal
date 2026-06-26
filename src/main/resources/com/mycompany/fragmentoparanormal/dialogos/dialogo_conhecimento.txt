@@ -1,3 +1,6 @@
-Ordem Paranormal;Uma entidade de conhecimento proibido foi avistada.
-Ordem Paranormal;Fragmente sua presença e elimine a ameaça.
-Agente;Missão compreendida.
+Ordem Paranormal;Agente,
+Ordem Paranormal;Agora temos certeza. Sangue, Morte, Energia. Três locais. Três experimentos distintos, coordenados pela mesma organização.
+Ordem Paranormal;Encontramos referências a uma quarta instalação: uma mansão isolada, usada décadas atrás por uma sociedade dedicada ao estudo do paranormal.
+Ordem Paranormal;Os antigos proprietários desapareceram sem deixar rastros. Mas alguém voltou ao local recentemente.
+Ordem Paranormal;Esta pode ser a peça final que precisamos para entender o Projeto Gênese.
+Ordem Paranormal;Entre na mansão. Encontre os documentos. E descubra o que estão tentando criar.

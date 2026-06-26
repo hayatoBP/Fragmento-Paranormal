@@ -74,9 +74,10 @@ public class LojaService {
         Collections.shuffle(raros,      random);
         Collections.shuffle(muitoRaros, random);
 
-        itensAtivos.add(comuns.get(0));
-        itensAtivos.add(raros.get(0));
-        itensAtivos.add(muitoRaros.get(0));
+        // Cria CÓPIAS novas dos itens para que o estado "comprado" não persista entre ciclos
+        itensAtivos.add(comuns.get(0).copiar());
+        itensAtivos.add(raros.get(0).copiar());
+        itensAtivos.add(muitoRaros.get(0).copiar());
     }
 
     /** Chamado ao morrer/fugir — reseta a loja para o próximo ciclo. */

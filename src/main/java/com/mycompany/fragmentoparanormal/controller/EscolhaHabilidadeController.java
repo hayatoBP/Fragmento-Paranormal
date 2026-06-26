@@ -7,6 +7,8 @@ import com.mycompany.fragmentoparanormal.service.CatalogoHabilidadesService;
 import com.mycompany.fragmentoparanormal.service.CatalogoRituaisService;
 import com.mycompany.fragmentoparanormal.util.ClassePersonagem;
 import com.mycompany.fragmentoparanormal.util.GameState;
+import com.mycompany.fragmentoparanormal.util.MusicaManager;
+import com.mycompany.fragmentoparanormal.util.SomUtil;
 import com.mycompany.fragmentoparanormal.util.TelaUtil;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -33,6 +35,7 @@ public class EscolhaHabilidadeController {
 
     @FXML
     public void initialize() {
+        MusicaManager.tocarResto();
         jogador = GameContext.jogadorAtual;
         if (jogador == null) return;
 
@@ -59,8 +62,11 @@ public class EscolhaHabilidadeController {
                 painelOpcoes.getChildren().add(criarCartaoRitual(entrada));
             }
         } else {
+            // Combatente e Especialista: elemental só do próprio elemento
+            com.mycompany.fragmentoparanormal.util.Elemento elemJogador =
+                (jogador.getClasse() == ClassePersonagem.OCULTISTA) ? null : jogador.getElemento();
             List<Habilidade> disponiveis =
-                CatalogoHabilidadesService.getDisponiveis(jogador.getClasse(), jogador.getNomesHabilidades());
+                CatalogoHabilidadesService.getDisponiveis(jogador.getClasse(), jogador.getNomesHabilidades(), elemJogador);
 
             if (disponiveis.isEmpty()) {
                 lblAviso.setText("Você já aprendeu todas as habilidades disponíveis!");
@@ -81,7 +87,7 @@ public class EscolhaHabilidadeController {
         cartao.setPadding(new Insets(14));
         cartao.setAlignment(Pos.TOP_CENTER);
         cartao.setStyle(
-            "-fx-background-color: #16213e; -fx-border-color: #1abc9c;" +
+            "-fx-background-color: #1a0000; -fx-border-color: #cc0000;" +
             "-fx-border-width: 2; -fx-border-radius: 8; -fx-background-radius: 8;");
 
         // Ícone do elemento
@@ -101,7 +107,7 @@ public class EscolhaHabilidadeController {
 
         nome.setStyle("-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: #e0d0ff; -fx-wrap-text: true;");
         nome.setWrapText(true); nome.setMaxWidth(180);
-        elem.setStyle("-fx-font-size: 12px; -fx-text-fill: #1abc9c;");
+        elem.setStyle("-fx-font-size: 12px; -fx-text-fill: #cc4444;");
         grau.setStyle("-fx-font-size: 11px; -fx-text-fill: #aaa;");
         dano.setStyle("-fx-font-size: 12px; -fx-text-fill: #e74c3c;");
         pe  .setStyle("-fx-font-size: 12px; -fx-text-fill: #3498db;");
@@ -109,8 +115,9 @@ public class EscolhaHabilidadeController {
 
         Button btn = new Button("Aprender");
         btn.setPrefWidth(160);
-        btn.setStyle("-fx-background-color: #1abc9c; -fx-text-fill: white; -fx-font-weight: bold;");
+        btn.setStyle("-fx-background-color: #cc0000; -fx-text-fill: white; -fx-font-weight: bold;");
         btn.setOnAction(e -> {
+            SomUtil.tocarConfirmar();
             jogador.aprenderRitual(r);
             voltar(e);
         });
@@ -152,6 +159,7 @@ public class EscolhaHabilidadeController {
         btn.setPrefWidth(160);
         btn.setStyle("-fx-background-color: " + corBorda + "; -fx-text-fill: white; -fx-font-weight: bold;");
         btn.setOnAction(e -> {
+            SomUtil.tocarConfirmar();
             jogador.aprenderHabilidade(h);
             voltar(e);
         });
@@ -163,7 +171,7 @@ public class EscolhaHabilidadeController {
     private void voltar(ActionEvent event) {
         switch (telaOrigem) {
             case "COMBATE" -> TelaUtil.trocarTela(event, "/com/mycompany/fragmentoparanormal/view/combate.fxml");
-            case "STATUS"  -> TelaUtil.trocarTela(event, "/com/mycompany/fragmentoparanormal/view/status.fxml");
+            case "STATUS"  -> TelaUtil.trocarTela(event, "/com/mycompany/fragmentoparanormal/view/menuMissoes.fxml");
             default        -> TelaUtil.trocarTela(event, "/com/mycompany/fragmentoparanormal/view/missao.fxml");
         }
     }

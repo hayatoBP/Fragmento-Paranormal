@@ -1,30 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <?import javafx.scene.control.*?>
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox alignment="CENTER" spacing="20"
+<VBox alignment="CENTER" spacing="20" prefWidth="800" prefHeight="600"
       xmlns="http://javafx.com/javafx/21"
       xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="com.mycompany.fragmentoparanormal.controller.RankingController">
+      fx:controller="com.mycompany.fragmentoparanormal.controller.RankingController"
+      style="-fx-background-color: #000; -fx-padding: 36;">
 
-    <Label text="Ranking"
-           style="-fx-font-size: 28px; -fx-font-weight: bold;" />
+    <Label text="RANKING"
+           style="-fx-font-size: 36px; -fx-font-weight: bold; -fx-text-fill: #c0392b;"/>
 
-    <TableView fx:id="tabelaRanking"
-               prefWidth="600"
-               prefHeight="350">
-
+    <TableView fx:id="tabelaRanking" prefWidth="720" prefHeight="400">
         <columns>
-            <TableColumn fx:id="colNome" text="Nome" prefWidth="200"/>
-            <TableColumn fx:id="colNivel" text="Nível" prefWidth="100"/>
-            <TableColumn fx:id="colClasse" text="Classe" prefWidth="150"/>
-            <TableColumn fx:id="colFase" text="Fase/Missão" prefWidth="150"/>
+            <!-- Coluna com ícone elemento + nome -->
+            <TableColumn fx:id="colElementoIcone" text="" prefWidth="40"/>
+            <TableColumn fx:id="colNome"    text="Nome"        prefWidth="200"/>
+            <TableColumn fx:id="colNivel"   text="Nível"       prefWidth="80"/>
+            <TableColumn fx:id="colClasse"  text="Classe"      prefWidth="160"/>
+            <TableColumn fx:id="colFase"    text="Fase/Missão" prefWidth="180"/>
         </columns>
-
     </TableView>
 
-    <Button text="Voltar" prefWidth="150" onAction="#voltar"/>
-
+    <Button text="← Voltar" prefWidth="160" onAction="#voltar"
+            style="-fx-background-color: #1a0000; -fx-text-fill: #cc3333;
+                   -fx-border-color: #8b0000; -fx-border-width: 1;
+                   -fx-border-radius: 4; -fx-background-radius: 4;
+                   -fx-cursor: hand; -fx-padding: 8 0;"/>
 </VBox>

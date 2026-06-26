@@ -1,3 +1,7 @@
-Ordem Paranormal;Agente, há uma anomalia de morte no local.
-Ordem Paranormal;Colete os fragmentos e sobreviva.
-Agente;Estou pronto.
+Ordem Paranormal;Agente,
+Ordem Paranormal;As informações recuperadas no Hospital Santa Agnes trouxeram novas preocupações.
+Ordem Paranormal;Os documentos indicam que alguém conduziu experimentos paranormais no local anos após o incidente original.
+Ordem Paranormal;Agora encontramos registros semelhantes ligados a um antigo cemitério abandonado.
+Ordem Paranormal;Há cerca de dez anos ocorreu uma série de mortes estranhas na região. O caso foi arquivado sem explicações.
+Ordem Paranormal;Recentemente detectamos atividade paranormal crescente no local.
+Ordem Paranormal;Investigue o cemitério. Se os documentos estiverem corretos, o hospital pode não ter sido um caso isolado.

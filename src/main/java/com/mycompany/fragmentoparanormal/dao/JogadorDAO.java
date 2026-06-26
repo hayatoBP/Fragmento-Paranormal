@@ -43,9 +43,9 @@ public class JogadorDAO {
             INSERT INTO jogadores
                 (nome, classe, genero, elemento, nivel, xp_atual,
                  vida, vida_maxima, forca, investigacao, poder_paranormal,
-                 pontos_esforco, pe_maximo, pontos_atributo,
+                 pontos_esforco, pe_maximo, pontos_atributo, dinheiro,
                  arma_equipada, arma_bonus_dano)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             RETURNING id
             """;
         try (Connection conn = DatabaseConnection.getConnection();
@@ -73,7 +73,7 @@ public class JogadorDAO {
                 vida = ?, vida_maxima = ?,
                 forca = ?, investigacao = ?, poder_paranormal = ?,
                 pontos_esforco = ?, pe_maximo = ?,
-                pontos_atributo = ?,
+                pontos_atributo = ?, dinheiro = ?,
                 arma_equipada = ?, arma_bonus_dano = ?,
                 atualizado_em = CURRENT_TIMESTAMP
             WHERE id = ?
@@ -94,14 +94,15 @@ public class JogadorDAO {
             ps.setInt   (11, jogador.getPontosEsforco());
             ps.setInt   (12, jogador.getPeMaximo());
             ps.setInt   (13, jogador.getPontosAtributo());
+            ps.setInt   (14, jogador.getDinheiro());
             if (jogador.getArmaEquipada() != null) {
-                ps.setString(14, jogador.getArmaEquipada().getNome());
-                ps.setInt   (15, jogador.getArmaEquipada().getBonusDano());
+                ps.setString(15, jogador.getArmaEquipada().getNome());
+                ps.setInt   (16, jogador.getArmaEquipada().getBonusDano());
             } else {
-                ps.setNull(14, Types.VARCHAR);
-                ps.setInt (15, 0);
+                ps.setNull(15, Types.VARCHAR);
+                ps.setInt (16, 0);
             }
-            ps.setInt(16, id);
+            ps.setInt(17, id);
             ps.executeUpdate();
             System.out.println("[DAO] Jogador id=" + id + " atualizado.");
         } catch (SQLException e) {
@@ -125,12 +126,13 @@ public class JogadorDAO {
         ps.setInt   (12, jogador.getPontosEsforco());
         ps.setInt   (13, jogador.getPeMaximo());
         ps.setInt   (14, jogador.getPontosAtributo());
+        ps.setInt   (15, jogador.getDinheiro());
         if (jogador.getArmaEquipada() != null) {
-            ps.setString(15, jogador.getArmaEquipada().getNome());
-            ps.setInt   (16, jogador.getArmaEquipada().getBonusDano());
+            ps.setString(16, jogador.getArmaEquipada().getNome());
+            ps.setInt   (17, jogador.getArmaEquipada().getBonusDano());
         } else {
-            ps.setNull(15, Types.VARCHAR);
-            ps.setInt (16, 0);
+            ps.setNull(16, Types.VARCHAR);
+            ps.setInt (17, 0);
         }
     }
 
@@ -186,7 +188,7 @@ public class JogadorDAO {
                    nivel, xp_atual, vida, vida_maxima,
                    forca, investigacao, poder_paranormal,
                    pontos_esforco, pe_maximo, pontos_atributo,
-                   arma_equipada, arma_bonus_dano
+                   dinheiro, arma_equipada, arma_bonus_dano
             FROM jogadores
             ORDER BY atualizado_em DESC
             """;
@@ -211,7 +213,7 @@ public class JogadorDAO {
                    nivel, xp_atual, vida, vida_maxima,
                    forca, investigacao, poder_paranormal,
                    pontos_esforco, pe_maximo, pontos_atributo,
-                   arma_equipada, arma_bonus_dano, id
+                   dinheiro, arma_equipada, arma_bonus_dano, id
             FROM jogadores
             WHERE nome = ?
             """;
@@ -286,6 +288,7 @@ public class JogadorDAO {
         // Ajusta o XP atual exato
         // (ganharXp sobe nível quando chega a 100; aqui só repomos o estado)
 
+        p.setDinheiro(rs.getInt("dinheiro"));
         String armaNome = rs.getString("arma_equipada");
         if (armaNome != null && !armaNome.isBlank()) {
             p.setArmaEquipada(new Arma(armaNome, rs.getInt("arma_bonus_dano")));

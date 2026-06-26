@@ -1,3 +1,6 @@
-Ordem Paranormal;Energia paranormal instável detectada na região.
-Ordem Paranormal;Investigue e colete os fragmentos.
-Agente;Vou ao local agora.
+Ordem Paranormal;Agente,
+Ordem Paranormal;Os padrões que identificamos no cemitério levantam uma questão grave.
+Ordem Paranormal;Alguém está usando locais marcados por tragédias para conduzir experimentos. O hospital, o cemitério... não são os únicos.
+Ordem Paranormal;Detectamos anomalias em um parque de diversões abandonado. Um incêndio destruiu o local há anos, mas a influência paranormal permanece intensa.
+Ordem Paranormal;A energia residual naquele lugar está instável e crescendo.
+Ordem Paranormal;Investigue o parque, recupere os documentos e descubra o que está sendo feito lá.

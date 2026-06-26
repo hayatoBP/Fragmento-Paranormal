@@ -3,6 +3,8 @@ package com.mycompany.fragmentoparanormal.controller;
 import com.mycompany.fragmentoparanormal.model.Personagem;
 import com.mycompany.fragmentoparanormal.model.Ritual;
 import com.mycompany.fragmentoparanormal.service.CatalogoRituaisService;
+import com.mycompany.fragmentoparanormal.util.MusicaManager;
+import com.mycompany.fragmentoparanormal.util.SomUtil;
 import com.mycompany.fragmentoparanormal.util.TelaUtil;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -33,6 +35,7 @@ public class RituaisController {
 
     @FXML
     public void initialize() {
+        MusicaManager.tocarResto();
         jogador = GameContext.jogadorAtual;
         
         listaRituais.getSelectionModel().selectedItemProperty().addListener((obs, ant, sel) -> {
@@ -100,6 +103,7 @@ public class RituaisController {
 
     @FXML
     private void voltar(ActionEvent event) {
+        SomUtil.tocarVoltar();
         TelaUtil.trocarTela(event, "/com/mycompany/fragmentoparanormal/view/inventario.fxml");
     }
 }

@@ -6,7 +6,6 @@ import com.mycompany.fragmentoparanormal.model.Personagem;
 import com.mycompany.fragmentoparanormal.util.Elemento;
 import com.mycompany.fragmentoparanormal.util.GameState;
 import com.mycompany.fragmentoparanormal.util.TipoInimigo;
-import com.mycompany.fragmentoparanormal.model.LocalMapa;
 
 import java.util.Random;
 
@@ -24,23 +23,12 @@ public class GeradorInimigoService {
     private static final Random random = new Random();
 
     public static Inimigo gerarInimigo(Personagem jogador) {
-        // 1. Boss Final — só aparece após concluir TODAS as missões
-        if (MissaoService.campanhaConcluida() && GameState.isBossDesbloqueado()) {
-            return Inimigo.criarBossFinal();
-        }
+        // Bosses são acionados diretamente pelo MissaoController e MenuMissoesController.
+        // Aqui geramos apenas inimigos normais para o combate de cada local.
 
         Missao missaoAtual = GameState.getMissaoAtual();
         int indiceMissao   = getIndiceMissaoAtual(missaoAtual);
 
-        // 2. Boss de Missão — aparece quando todas as páginas da missão atual foram coletadas
-        //    e o boss ainda não foi derrotado nesta sessão
-        if (missaoAtual != null
-                && missaoAtual.getLocais().stream().allMatch(LocalMapa::isPaginaEncontrada)
-                && !GameState.isBossMissaoDerrotado(indiceMissao)) {
-            return Inimigo.criarBossMissao(missaoAtual.getElemento(), indiceMissao);
-        }
-
-        // 3. Inimigo normal
         Elemento    elemento = sortearElemento(missaoAtual);
         TipoInimigo tipo     = sortearTipo(jogador.getNivel());
         return new Inimigo(elemento, tipo, indiceMissao);

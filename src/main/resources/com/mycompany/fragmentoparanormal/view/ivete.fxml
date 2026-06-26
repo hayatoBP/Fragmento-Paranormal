@@ -7,45 +7,46 @@
 <StackPane xmlns:fx="http://javafx.com/fxml"
            fx:controller="com.mycompany.fragmentoparanormal.controller.IveteController"
            prefWidth="800" prefHeight="600"
-           style="-fx-background-color: #0d0d1a;">
+           style="-fx-background-color: #0d0000;">
 
-    <!-- Fundo escuro degradê -->
-    <Pane style="-fx-background-color: linear-gradient(to bottom, #0d0d1a, #1a0a2e);"/>
+    <!-- Fundo escuro degradê vermelho -->
+    <Pane style="-fx-background-color: linear-gradient(to bottom, #0d0000, #1a0000);"/>
 
     <VBox alignment="BOTTOM_CENTER" spacing="0">
 
-        <!-- Imagem da Ivete (placeholder — colocar em images/personagens/ivete.png) -->
+        <!-- Imagem da Ivete -->
         <ImageView fx:id="imgIvete" fitHeight="380" fitWidth="280" preserveRatio="true"
                    translateY="20">
             <image>
-                <Image url="@../images/personagens/ivete.png" errorHandling="EMPTY"/>
+                <Image url="@../images/personagens/ivete.png" />
             </image>
         </ImageView>
 
         <!-- Painel de diálogo -->
         <VBox alignment="CENTER" spacing="14"
-              style="-fx-background-color: rgba(15,5,30,0.92);
-                     -fx-border-color: #6c3483;
+              style="-fx-background-color: rgba(10,0,0,0.92);
+                     -fx-border-color: #8b0000;
                      -fx-border-width: 2 0 0 0;
                      -fx-padding: 24 40 28 40;">
 
             <Label text="Ivete — Comerciante da Ordem"
-                   style="-fx-font-size: 13px; -fx-text-fill: #a060d0; -fx-font-weight: bold;"/>
+                   style="-fx-font-size: 13px; -fx-text-fill: #cc3333; -fx-font-weight: bold;"/>
 
             <Label fx:id="lblDialogo" wrapText="true" textAlignment="CENTER"
-                   style="-fx-font-size: 14px; -fx-text-fill: #e8d8ff; -fx-font-style: italic;"
+                   style="-fx-font-size: 14px; -fx-text-fill: #f0d0d0; -fx-font-style: italic;"
                    maxWidth="600"/>
 
             <HBox alignment="CENTER" spacing="16">
                 <Button text="Ver Itens" onAction="#entrarNaLoja"
-                        style="-fx-background-color: #6c3483; -fx-text-fill: white;
+                        style="-fx-background-color: #8b0000; -fx-text-fill: white;
                                -fx-font-weight: bold; -fx-font-size: 14px;
                                -fx-padding: 10 30; -fx-border-radius: 8;
                                -fx-background-radius: 8; -fx-cursor: hand;"/>
                 <Button text="Talvez depois" onAction="#voltar"
-                        style="-fx-background-color: #2a2a3a; -fx-text-fill: #999;
+                        style="-fx-background-color: #2a0000; -fx-text-fill: #999;
                                -fx-font-size: 13px; -fx-padding: 10 20;
                                -fx-border-radius: 8; -fx-background-radius: 8;
+                               -fx-border-color: #555; -fx-border-width: 1;
                                -fx-cursor: hand;"/>
             </HBox>
         </VBox>
